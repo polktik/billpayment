@@ -6,8 +6,8 @@ import "../pageCSS/Welcome.css";
 export default function Welcome() {
    const navigate = useNavigate();
 
-   const goLogin = () => {
-      navigate("/login");
+   const goSignin = () => {
+      navigate("/signin");
    };
    const goRegister = () => {
       navigate("/register");
@@ -17,7 +17,7 @@ export default function Welcome() {
       return (
          <div>
             <div className="welcome-header">
-               <button className="signin-button" onClick={goLogin}>Sign In</button>
+               <button className="signin-button" onClick={goSignin}>Sign In</button>
             </div>
             <div>
                <img className="onlinePayment" src={welcome} alt="welcome-pic" />
