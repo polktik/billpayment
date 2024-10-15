@@ -1,0 +1,19 @@
+.welcome-header {
+    background-color: #454545;
+    text-align: end;
+    width: auto;
+    height: 110px;
+}
+
+.signin-sbutton {
+    background-color: #4D81E4;
+    border: #14128F 4px solid;
+    border-radius: 10px;
+    width: 209px;
+    height: 76px;
+    font-size: 45px;
+    margin-top: 17px;
+    margin-right: 54px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight: bold;
+}
