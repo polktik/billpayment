@@ -16,7 +16,7 @@ export default function Welcome() {
             <div className="welcome-header">
                <button className="signin-button" onClick={goLogin}>Sign In</button>
             </div>
-            <img src={welcome} alt="wselcome-pic" />
+            <img src={welcome} alt="welcome-pic" />
          </div>
       );
    };
