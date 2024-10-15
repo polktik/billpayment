@@ -1,0 +1,65 @@
+//connect bacckend to front end
+
+/////////////////// install command //////////////////////
+npm install axios
+
+
+//////////////////Example "How to connect"/////////////////
+
+import React, { useState } from 'react';
+import axios from 'axios';
+
+export default function Signin() {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
+
+    const handleLogin = async (event) = {
+        event.preventDefault();  Prevent the default form submission
+
+        try {
+            const response = await axios.post('httplocalhost:3309/login', { username, password });********************
+            setMessage(response.data.message);  Display success message
+             Optionally redirect or perform other actions on successful login
+             window.location.href = 'dashboard';  Example redirect to a dashboard
+        } catch (error) {
+            if (error.response) {
+                 The request was made and the server responded with a status code
+                setMessage(error.response.data.message);  Display error message
+            } else {
+                 Something happened in setting up the request that triggered an Error
+                setMessage('An error occurred. Please try again later.');
+            }
+        }
+    };
+
+    return (
+        div style={{ padding '50px', textAlign 'center' }}
+            h1LOGINh1
+            form onSubmit={handleLogin}
+                div
+                    label htmlFor=usernameUsernamelabel
+                    input
+                        type=text
+                        id=username
+                        value={username}
+                        onChange={(e) = setUsername(e.target.value)}
+                        required
+                    
+                div
+                div
+                    label htmlFor=passwordPasswordlabel
+                    input
+                        type=password
+                        id=password
+                        value={password}
+                        onChange={(e) = setPassword(e.target.value)}
+                        required
+                    
+                div
+                button type=submitLoginbutton
+            form
+            {message && p{message}p}
+        div
+    );
+}
