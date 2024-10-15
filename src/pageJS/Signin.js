@@ -1,5 +1,50 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "../pageCSS/Signin.css";
+import axios from 'axios';
+import { useState } from "react";
+
 export default function Signin() {
-    return(<>
-        <h1>LOGIN</h1>
-    </>);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
+
+
+    const handleLogin = async(event) => {
+        event.preventDefault();
+
+        try {
+            const response = await axios.post('http://localhost:3309/login', { username, password });
+            setMessage(response.data.message);
+            navigate("/home");
+
+    } catch (error) {
+        if (error.response) {
+            setMessage(error.response.data.message);
+        } else {
+            setMessage('An error occurred. Please try again later.');
+        }
+    }
+};
+
+return (<div className="signin-page">
+    <div className="signin-box">
+        <h2>Sign in</h2>
+        <form onSubmit={handleLogin}>
+            <div className="username-box">
+                <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
+            </div>
+            <div className="password-box">
+                <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
+            </div>
+            <div className="forgot-password">
+                <a href="/forgot">Forgot Password?</a>
+            </div>
+            <button type="submit" className="signin-button">Sign in</button>
+            {message && <p>{message}</p>} {/* แสดงข้อความแจ้งเตือน */}
+        </form>
+    </div>
+</div>
+);
 }

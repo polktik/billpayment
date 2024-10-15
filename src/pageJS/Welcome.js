@@ -17,7 +17,7 @@ export default function Welcome() {
       return (
          <div>
             <div className="welcome-header">
-               <button className="signin-button" onClick={goSignin}>Sign In</button>
+               <button className="signin-button" onClick={goSignin}>Sign in</button>
             </div>
             <div>
                <img className="onlinePayment" src={welcome} alt="welcome-pic" />
