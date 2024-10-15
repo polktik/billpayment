@@ -60,7 +60,7 @@ app.get("/getuser",(req,res)=>{
     });
 });
 
-// หลังจากเข้าสู่ระบบ ให้เช็คว่าเจอเมลในฐานข้อมูลไหม ถ้าไม่เจอให้สร้างใหม่ ถ้าเจอให้อัพเดท
+// หลังจากเข้าสู่ระบบ ให้เช็คว่าเจอเมลในฐานข้อมูลไหม ถ้าไม่เจอให้สร้างใหม่
 app.post("/register", (req, res) => {
     let request = req.body;
     console.log(request);
@@ -74,7 +74,7 @@ app.post("/register", (req, res) => {
 
       } else {
         // ไม่เจอให้สร้างใหม่
-        console.log("query from db",results);
+        console.log("query from db",results.length);
         if (!results.length) {
           console.log("Username : " + request.username + " not found in database");
 
@@ -120,6 +120,7 @@ app.post("/register", (req, res) => {
 
   app.post("/login",(req,res) => {
     let request = req.body;
+    console.log("frontend data",req.body);
     console.log("data from frontend username",request.username,"password",request.password);
     const query = 'SELECT username, password_hash FROM users WHERE username = "'+ request.username +'"';
 
@@ -128,9 +129,11 @@ app.post("/register", (req, res) => {
             console.error("Error querying MYSQL:",err);
             res.status(500).json({error:"Internal Server Error" });
         }else{
-            console.log("query from SQL",results);
+            const passExtract = results[0];
+            const hashedPassword = passExtract.password_hash;
+            console.log("query from SQL",hashedPassword);
 
-            bcrypt.compare(request.password,results.password_hash,(err, password) =>{
+            bcrypt.compare(request.password,hashedPassword,(err, password) =>{
                 if(err){
                     console.error("Error comparing password");
                     return;
