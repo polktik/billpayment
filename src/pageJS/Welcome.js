@@ -16,18 +16,18 @@ export default function Welcome() {
    function WelcomePage() {
       return (
          <div>
-            <div className="welcome-header">
-               <button className="signin-button" onClick={goSignin}>Sign in</button>
+            <div className="wel-welcome-header">
+               <button className="wel-signin-button" onClick={goSignin}>Sign in</button>
             </div>
             <div>
-               <img className="onlinePayment" src={welcome} alt="welcome-pic" />
-               <div className="welcome-text">
-                  <p className="first-line">Welcome to Bill payment Tracking System</p>
-                  <p className="second-line">Doesn't have an account?</p>
+               <img className="wel-onlinePayment" src={welcome} alt="welcome-pic" />
+               <div className="wel-welcome-text">
+                  <p className="wel-first-line">Welcome to Bill payment Tracking System</p>
+                  <p className="wel-second-line">Doesn't have an account?</p>
                </div>
             </div>
-            <div className="page-end">
-               <button className="register-button" onClick={goRegister}>Register Now</button>
+            <div className="wel-page-end">
+               <button className="wel-register-button" onClick={goRegister}>Register Now</button>
             </div>
          </div>
       );

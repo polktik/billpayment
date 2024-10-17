@@ -5,28 +5,28 @@
     font-style: normal;
 }
 
-.welcome-header {
+.wel-welcome-header {
     background-color: #454545;
     text-align: end;
     width: auto;
     height: 110px;
 }
 
-.signin-button {
+.wel-signin-button {
     color: white;
     background-color: #4D81E4;
     border: #14128F 4px solid;
     border-radius: 10px;
     width: 209px;
-    height: 60px;
-    font-size: 30px;
+    height: 70px;
+    font-size: 40px;
     margin-top: 17px;
     margin-right: 54px;
     font-family: 'fontBold', sans-serif;
     font-weight: bold;
 }
 
-.register-button {
+.wel-register-button {
     color : white;
     background-color: #347928;
     border: #73EC8B 4px solid;
@@ -38,7 +38,7 @@
     font-weight: bold;    
 }
 
-.onlinePayment {
+.wel-onlinePayment {
     position: relative;
     display: block;
     width: stretch;
@@ -49,7 +49,7 @@
     z-index: 1;
 }
 
-.welcome-text{
+.wel-welcome-text{
     position: relative;
     text-align: center;
     border: #000000 4px solid;
@@ -63,14 +63,14 @@
     margin: -100px auto;
 }
 
-.first-line, .second-line {
+.wel-first-line, .wel-second-line {
     font-family: 'fontBold', sans-serif;
     font-size: clamp(24px ,2vw, 48px);
     color: black;
     margin: 10px 0;
 }
 
-.page-end {
+.wel-page-end {
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;

@@ -31,20 +31,20 @@ export default function Signin() {
     }
 };
 
-return (<div className="signin-page">
-    <div className="signin-box">
+return (<div className="sig-signin-page">
+    <div className="sig-signin-box">
         <h2>Sign in</h2>
         <form onSubmit={handleLogin}>
-            <div className="username-box">
+            <div className="sig-username-box">
                 <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
             </div>
-            <div className="password-box">
+            <div className="sig-password-box">
                 <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
             </div>
-            <div className="forgot-password">
+            <div className="sig-forgot-password">
                 <a href="/forgot">Forgot Password?</a>
             </div>
-            <button type="submit" className="signin-button">Sign in</button>
+            <button type="submit" className="sig-signin-button">Sign in</button>
             {message && <p>{message}</p>} {/* แสดงข้อความแจ้งเตือน */}
         </form>
     </div>
