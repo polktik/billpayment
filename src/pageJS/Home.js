@@ -16,6 +16,9 @@ export default function Home() {
             <div className="hom-section">
                 <h3 className="hom-section-title reminder-title">Bill Reminder</h3>
                 <div className="reminder-container">
+                    <div className="reminder-list">
+                        
+                    </div>
 
                 </div>
             </div>
@@ -23,6 +26,9 @@ export default function Home() {
             <div className="hom-section">
                 <h3 className="hom-section-title noti-title">Notification</h3>
                 <div className="noti-container">
+                    <div className="noti-list">
+
+                    </div>
 
                 </div>
 
