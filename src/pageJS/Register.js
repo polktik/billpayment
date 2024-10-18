@@ -20,7 +20,12 @@ export default function Register() {
         try {
             const response = await axios.post('http://localhost:3309/register', { firstname, lastname, username, password, email });
             setMessage(response.data.message);
-            navigate("/home");
+            if(response.data.success){
+                navigate("/home");
+            }else{
+                alert("username already exists. please use a different username")
+            }
+
 
     } catch (error) {
         if (error.response) {

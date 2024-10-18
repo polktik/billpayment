@@ -133,7 +133,7 @@ app.post("/register", (req, res) => {
         } else {
           // ถ้าเจอให้อัพเดทข้อมูล
           console.log(request.username + " has already used");
-          res.status(200).json({success:true});
+          res.status(200).json({success:false});
         }
       }
     });
@@ -164,7 +164,7 @@ app.post("/register", (req, res) => {
                     res.status(200).json({ success:true });
                 }else{
                     console.log("password does not match!");
-                    res.status(401).json({succes:false});
+                    res.status(200).json({succes:false});
                 }
             });
             

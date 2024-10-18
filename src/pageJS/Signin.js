@@ -23,7 +23,7 @@ export default function Signin() {
             if(response.data.success){
                 navigate("/home");
             }else{
-                alert("incorrect input please try again!!");
+                alert("Username or Password does not match please try again!!");
             }
 
 
