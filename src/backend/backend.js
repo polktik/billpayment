@@ -126,7 +126,7 @@ app.post("/register", (req, res) => {
             } else {
               // สร้างใหม่สำเร็จ
               console.log("username : " + request.username + " insert Success");
-              res.status(200).json({ success: true });
+              res.status(200).json({ success: true }); //
             }
           });
         });
