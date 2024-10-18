@@ -23,7 +23,7 @@ export default function Register() {
             if(response.data.success){
                 navigate("/home");
             }else{
-                alert("username already exists. please use a different username")
+                alert("username or Email already exists. please try again")
             }
 
 
