@@ -5,11 +5,8 @@ import axios from 'axios';
 import { useState } from "react";
 
 export default function Signin() {
-    const [firstname, setFirstname] = useState('');
-    const [lastname, setLastname] =useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
@@ -18,7 +15,7 @@ export default function Signin() {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3309/login', { firstname, lastname, username, password, email });
+            const response = await axios.post('http://localhost:3309/login', {username, password });
             setMessage(response.data.message);
             if(response.data.success){
                 navigate("/home");

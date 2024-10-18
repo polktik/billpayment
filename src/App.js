@@ -5,6 +5,7 @@ import Signin from './pageJS/Signin';
 import Register from './pageJS/Register';
 import Home from './pageJS/Home';
 import Forgot from './pageJS/Forgot';
+import ResetPassword from './pageJS/ResetPassword';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
         <Route path="/forgot" element={<Forgot/>}/>
+        <Route path="/resetpassword" element={<ResetPassword/>}/>
       </Routes>
     </Router>
   );

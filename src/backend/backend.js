@@ -50,12 +50,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL_USER,  // your email address
     pass: process.env.EMAIL_PASS,  // your email password or application-specific password
-  }  //,
-//   tls: {
-//     rejectUnauthorized: false,
-//   },
-//   logger: true, // Enable logging
-//   debug: true,  // Enable debugging
+  }
 });
 
 
@@ -67,6 +62,8 @@ db.connect((err) => {
     console.log("Connected to MySQL database");
   }
 });
+
+
 
 app.get("/getuser",(req,res)=>{
     const query = "SELECT * FROM users";
@@ -81,24 +78,24 @@ app.get("/getuser",(req,res)=>{
     });
 });
 
-// หลังจากเข้าสู่ระบบ ให้เช็คว่าเจอเมลในฐานข้อมูลไหม ถ้าไม่เจอให้สร้างใหม่
+// REGISTER
 app.post("/register", (req, res) => {
     let request = req.body;
     console.log(request);
-    const query = 'SELECT * FROM users WHERE username = "' + request.username + '"';
+    const query = 'SELECT * FROM users WHERE username = ? or email = ?';
     const hRounds = 10;
   
-    db.query(query, (err, results) => {
+    db.query(query,[request.username,request.email], (err, results) => {
       if (err) {
         console.error("Error querying MySQL:", err);
         res.status(500).json({ error: "Internal Server Error" });
 
       } else {
-        // ไม่เจอให้สร้างใหม่
         console.log("query from db",results.length);
+        console.log(results.body);
+        console.log("query username",results.username);
+        console.log("query email",results.email);
         if (!results.length) {
-          console.log("Username : " + request.username + " not found in database");
-
           bcrypt.hash(request.password, hRounds, (err, hash) => {
             if (err) {
               console.error("Error hashing password:", err);
@@ -106,32 +103,18 @@ app.post("/register", (req, res) => {
               return;
             } 
 
-          const query =
-            'INSERT INTO users (first_name,last_name,username,password_hash,email) VALUE ("' +
-            request.firstname +
-            '","' +
-            request.lastname +
-            '","' +
-            request.username +
-            '","' +
-            hash +
-            '","' +
-            request.email +
-            '")';
-  
-          db.query(query, (err, results) => {
+          const insertquery = 'INSERT INTO users (first_name, last_name, username, password_hash, email) VALUES (?, ?, ?, ?, ?)';
+          db.query(insertquery,[request.firstname,request.lastname,request.username,hash,request.email], (err, results) => {
             if (err) {
               console.error("Error querying MySQL:", err);
               res.status(500).json({ error: "Internal Server Error" });
             } else {
-              // สร้างใหม่สำเร็จ
               console.log("username : " + request.username + " insert Success");
               res.status(200).json({ success: true }); //
             }
           });
         });
         } else {
-          // ถ้าเจอให้อัพเดทข้อมูล
           console.log(request.username + " has already used");
           res.status(200).json({success:false});
         }
@@ -139,6 +122,8 @@ app.post("/register", (req, res) => {
     });
   });
 
+
+  //LOGIN
   app.post("/login",(req,res) => {
     let request = req.body;
     console.log("frontend data",req.body);
@@ -150,6 +135,7 @@ app.post("/register", (req, res) => {
             console.error("Error querying MYSQL:",err);
             res.status(500).json({error:"Internal Server Error" });
         }else{
+            console.log("data from backend : ",results)
             const passExtract = results[0];
             const hashedPassword = passExtract.password_hash;
             console.log("query from SQL",hashedPassword);
@@ -226,18 +212,20 @@ app.post("/sendOTP", (req, res) => {
 });
 
 app.post("/verifyOTP", (req, res) => {
-  const { email, otp } = req.body;
+  const otp = req.body.votp;
+  console.log("Verification OTP : ",otp)
 
-  const query = 'SELECT otp, otp_expiry FROM users WHERE email = ?';
+  const query = 'SELECT otp, otp_expiry FROM users WHERE otp = ?';
 
-  db.query(query, [email], (err, results) => {
+  db.query(query, [otp], (err, results) => {
     if (err) {
       console.error("Error querying MySQL:", err);
       return res.status(500).json({ error: "Internal Server Error" });
     }
 
     if (!results.length) {
-      return res.status(404).json({ message: "Email not found." });
+      console.log("Verification denied");
+      return res.status(404).json({ message: "Verification denied." });
     }
 
     const { otp: storedOtp, otp_expiry } = results[0];
@@ -246,10 +234,11 @@ app.post("/verifyOTP", (req, res) => {
     if (otp === storedOtp && new Date() < new Date(otp_expiry)) {
       // OTP is valid
       res.status(200).json({ message: "OTP verified successfully!" });
+      console.log("Verification successifully");
       
       // Optionally, you may want to clear the OTP and expiry after successful verification
-      const clearOtpQuery = 'UPDATE users SET otp = NULL, otp_expiry = NULL WHERE email = ?';
-      db.query(clearOtpQuery, [email], (err) => {
+      const clearOtpQuery = 'UPDATE users SET otp = NULL, otp_expiry = NULL WHERE otp = ?';
+      db.query(clearOtpQuery, [otp], (err) => {
         if (err) {
           console.error("Error clearing OTP from database:", err);
         }
@@ -261,10 +250,32 @@ app.post("/verifyOTP", (req, res) => {
   });
 });
 
+app.put("/resetPassword",(req,res)=>{
+  const email =req.body.email;
+  const password = req.body.resetPassword ;
+  console.log(req.body);
+  console.log("Email",email);
+  console.log("Password to reset",password);
+  const hRounds = 10;
 
-  
-  
+  bcrypt.hash(password, hRounds, (err, hash) => {
+    if (err) {
+      console.error("Error hashing password:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    } 
 
+  const query = "UPDATE users SET password_hash =? where email = ?";
+  db.query(query,[hash,email], (err,results) =>{
+    if(err){
+      console.error("error resetting password");
+      return res.status(500).json({ error: 'An error occurred while updating the password.' });
+    }else{
+      return res.status(200).json({message: "Password reset successfully."});
+    }
+  });
+});
+});
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
