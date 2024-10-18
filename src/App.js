@@ -4,6 +4,7 @@ import Welcome from './pageJS/Welcome';
 import Signin from './pageJS/Signin';
 import Register from './pageJS/Register';
 import Home from './pageJS/Home';
+import Forgot from './pageJS/Forgot';
 import './App.css';
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/signin" element={<Signin />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/forgot" element={<Forgot/>}/>
       </Routes>
     </Router>
   );

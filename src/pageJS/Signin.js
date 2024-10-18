@@ -28,13 +28,17 @@ export default function Signin() {
 
 
     } catch (error) {
-        if (error.response) {
-            setMessage(error.response.data.message);
+        if (error.response && error.response.data && error.response.data.error) {
+            alert(error.response.data.error);
         } else {
-            setMessage('An error occurred. Please try again later.');
+            alert('An error occurred. Please try again later.');
         }
     }
 };
+
+    const handleForgotPassword = () => {
+        navigate("/forgot");
+    };
 
 return (<div className="sig-signin-page">
     <div className="sig-signin-box">
@@ -47,7 +51,7 @@ return (<div className="sig-signin-page">
                 <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
             </div>
             <div className="sig-forgot-password">
-                <a href="/forgot">Forgot Password?</a>
+                <a onClick = {handleForgotPassword}>Forgot Password?</a>
             </div>
             <button type="submit" className="sig-signin-button">Sign in</button>
             {message && <p>{message}</p>} {/* แสดงข้อความแจ้งเตือน */}

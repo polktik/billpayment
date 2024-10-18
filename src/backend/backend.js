@@ -4,6 +4,7 @@ const { application } = require('express');
 const bcrypt = require('bcrypt');
 var mysql = require('mysql2');
 const cors = require('cors');
+const nodemailer = require('nodemailer'); 
 
 const app = express();
 const port = 3309;
@@ -38,6 +39,23 @@ const db = mysql.createConnection({
     password: process.env.DB_PASS,
     port : process.env.DB_PORT,
     database: process.env.DB_DATABASE,
+});
+
+
+const transporter = nodemailer.createTransport({
+  service:"Gmail",
+  host: process.env.EMAIL_HOST, // e.g., 'smtp.gmail.com'
+  port: process.env.EMAIL_PORT,  // e.g., 587 for Gmail
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: process.env.EMAIL_USER,  // your email address
+    pass: process.env.EMAIL_PASS,  // your email password or application-specific password
+  }  //,
+//   tls: {
+//     rejectUnauthorized: false,
+//   },
+//   logger: true, // Enable logging
+//   debug: true,  // Enable debugging
 });
 
 
@@ -146,7 +164,7 @@ app.post("/register", (req, res) => {
                     res.status(200).json({ success:true });
                 }else{
                     console.log("password does not match!");
-                    res.status(200).json({ success:false });
+                    res.status(401).json({succes:false});
                 }
             });
             
@@ -154,6 +172,98 @@ app.post("/register", (req, res) => {
     });
   });
 
+
+
+  // Existing /sendOTP endpoint
+// Existing /sendOTP endpoint
+app.post("/sendOTP", (req, res) => {
+  const { email } = req.body;
+
+  const query = 'SELECT * FROM users WHERE email = ?';
+
+  db.query(query, [email], (err, results) => {
+    if (err) {
+      console.error("Error querying MySQL:", err);
+      res.status(500).json({ error: "Internal Server Error" });
+      return;
+    }
+
+    if (!results.length) {
+      console.log("Email not found:", email);
+      res.status(404).json({ message: "This email doesn't have in a database." });
+      return;
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+    const otpExpiry = new Date(Date.now() + 300 * 1000); // 5 minutes expiry
+
+    // Setup email data
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Your OTP Code',
+      text:  `Your OTP code is: ${otp}\nOTP will expire in 5 minutes`
+    };
+
+    // Update the OTP and its expiry in the database
+    const updateOtpQuery = 'UPDATE users SET otp = ?, otp_expiry = ? WHERE email = ?';
+    db.query(updateOtpQuery, [otp, otpExpiry, email], (err) => {
+      if (err) {
+        console.error("Error updating OTP in database:", err);
+        return res.status(500).json({ error: "Failed to update OTP." });
+      }
+
+      // Send the email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending email:", error);
+          return res.status(500).json({ error: "Failed to send OTP email." });
+        }
+        console.log('Email sent: ' + info.response);
+        res.status(200).json({ message: "OTP sent successfully" });
+      });
+    });
+  });
+});
+
+app.post("/verifyOTP", (req, res) => {
+  const { email, otp } = req.body;
+
+  const query = 'SELECT otp, otp_expiry FROM users WHERE email = ?';
+
+  db.query(query, [email], (err, results) => {
+    if (err) {
+      console.error("Error querying MySQL:", err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    if (!results.length) {
+      return res.status(404).json({ message: "Email not found." });
+    }
+
+    const { otp: storedOtp, otp_expiry } = results[0];
+
+    // Check if OTP matches and is not expired
+    if (otp === storedOtp && new Date() < new Date(otp_expiry)) {
+      // OTP is valid
+      res.status(200).json({ message: "OTP verified successfully!" });
+      
+      // Optionally, you may want to clear the OTP and expiry after successful verification
+      const clearOtpQuery = 'UPDATE users SET otp = NULL, otp_expiry = NULL WHERE email = ?';
+      db.query(clearOtpQuery, [email], (err) => {
+        if (err) {
+          console.error("Error clearing OTP from database:", err);
+        }
+      });
+      
+    } else {
+      return res.status(400).json({ message: "Invalid or expired OTP." });
+    }
+  });
+});
+
+
+  
   
 
 
