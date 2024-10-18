@@ -10,7 +10,7 @@ const OTPForm = () => {
             alert(response.data.message);
         } catch (error) {
             if (error.response && error.response.status === 404) {
-                alert("This email doesn't have in a database.");
+                alert("This email doesn't Exist");
             } else {
                 alert('Error sending OTP: ' + error.message);
             }

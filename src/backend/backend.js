@@ -173,8 +173,6 @@ app.post("/register", (req, res) => {
   });
 
 
-
-  // Existing /sendOTP endpoint
 // Existing /sendOTP endpoint
 app.post("/sendOTP", (req, res) => {
   const { email } = req.body;
@@ -201,9 +199,10 @@ app.post("/sendOTP", (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Your OTP Code',
-      text:  `Your OTP code is: ${otp}\nOTP will expire in 5 minutes`
+      subject: 'OTP verification',
+      text: `Bill payment tracking system\nYour OTP code is: ${otp}\nOTP will expire in 5 minutes.\nPlease don't share this code for your secure.`
     };
+
 
     // Update the OTP and its expiry in the database
     const updateOtpQuery = 'UPDATE users SET otp = ?, otp_expiry = ? WHERE email = ?';
