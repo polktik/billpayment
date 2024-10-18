@@ -28,7 +28,7 @@
 }
 
 
-.reg-register-box {
+.register-box {
     background-color: #3e3e3e;
     width: 735px;
     height: 925px;
@@ -36,7 +36,7 @@
     text-align: center;
 }
 
-.reg-register-box h2 {
+.register-box h2 {
     font-family: 'fontBold', sans-serif;
     font-size: 64px;
     color: white;
@@ -48,7 +48,7 @@
     text-align: center;
 }
 
-.reg-register-box h2::after {
+.register-box h2::after {
     content: '';
     position: flex;
     bottom: 0;
@@ -59,11 +59,11 @@
     background-color: #555;
 }
 
-.reg-firstname-box {
+.firstname-box {
     margin-bottom: 20px;
 }
 
-.reg-firstname-box input {
+.firstname-box input {
     width: 590px;
     height: 72px;
     padding: 10px;
@@ -74,11 +74,11 @@
     font-family: 'fontMedium', sans-serif;
 }
 
-.reg-lastname-box {
+.lastname-box {
     position: relative;
 }
 
-.reg-lastname-box input {
+.lastname-box input {
     width: 590px;
     height: 72px;
     padding: 10px;
@@ -88,11 +88,11 @@
     font-family: 'fontMedium', sans-serif;
 }
 
-.reg-username-box {
+.username-box {
     position: relative;
 }
 
-.reg-username-box input {
+.username-box input {
     width: 590px;
     height: 72px;
     padding: 10px;
@@ -102,11 +102,11 @@
     font-family: 'fontMedium', sans-serif;
 }
 
-.reg-password-box {
+.password-box {
     position: relative;
 }
 
-.reg-password-box input {
+.password-box input {
     width: 590px;
     height: 72px;
     padding: 10px;
@@ -116,11 +116,11 @@
     font-family: 'fontMedium', sans-serif;
 }
 
-.reg-email-box {
+.email-box {
     position: relative;
 }
 
-.reg-email-box input {
+.email-box input {
     width: 590px;
     height: 72px;
     margin-top: 3%;
@@ -131,24 +131,24 @@
     font-family: 'fontMedium', sans-serif;
 }
 
-.reg-forgot-password {
+.forgot-password {
     text-align: left;
     margin-bottom: 20px;
     padding: 22px 62px;
 }
 
-.reg-forgot-password a {
+.forgot-password a {
     color: #14128F;
     text-decoration: none;
     font-size: 24px;
     font-family: 'fontRegular', sans-serif;
 }
 
-.reg-forgot-password a:hover {
+.forgot-password a:hover {
     text-decoration: underline;
 }
 
-.reg-register-button {
+.register-button {
     background-color: #4D81E4;
     color: white;
     border: 4px solid #ffffff;
@@ -161,7 +161,7 @@
     font-family: 'fontMedium', sans-serif;
 }
 
-.reg-register-button:hover {
+.register-button:hover {
     background-color: #3c6bd4;
 }
 /*test*/

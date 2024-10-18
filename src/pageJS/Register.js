@@ -31,29 +31,29 @@ export default function Register() {
     }
 };
 
-return (<div className="reg-register-page">
-    <div className="reg-register-box">
+return (<div className="register-page">
+    <div className="register-box">
         <h2>Register</h2>
         <form onSubmit={handleLogin}>
-            <div className="reg-firstname-box">
+            <div className="firstname-box">
                 <input type="text" placeholder="Firstname" value={firstname} onChange={(e)=>setFirstname(e.target.value)} required />
             </div>
-            <div className="reg-lastname-box">
+            <div className="lastname-box">
                 <input type="text" placeholder="Lastname" value={lastname} onChange={(e)=>setLastname(e.target.value)} required />
             </div>
-            <div className="reg-username-box">
+            <div className="username-box">
                 <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
             </div>
-            <div className="reg-password-box">
+            <div className="password-box">
                 <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
             </div>
-            <div className="reg-email-box">
+            <div className="email-box">
                 <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
             </div>
-            <div className="reg-forgot-password">
+            <div className="forgot-password">
                 <a href="/forgot">Forgot Password?</a>
             </div>
-            <button type="submit" className="reg-register-button">Register</button>
+            <button type="submit" className="register-button">Register</button>
             {message && <p>{message}</p>} {/* แสดงข้อความแจ้งเตือน */}
         </form>
     </div>
