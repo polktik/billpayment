@@ -134,6 +134,9 @@ app.post("/register", (req, res) => {
         if(err){
             console.error("Error querying MYSQL:",err);
             res.status(500).json({error:"Internal Server Error" });
+        }else if (!results.length) {
+          console.log("No user found with the provided username");
+          res.status(404).json({ error: "User does not exist" });
         }else{
             console.log("data from backend : ",results)
             const passExtract = results[0];

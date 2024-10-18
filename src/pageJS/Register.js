@@ -16,9 +16,10 @@ export default function Register() {
 
     const handleLogin = async(event) => {
         event.preventDefault();
+        const lowercaseEmail = email.toLowerCase();
 
         try {
-            const response = await axios.post('http://localhost:3309/register', { firstname, lastname, username, password, email });
+            const response = await axios.post('http://localhost:3309/register', { firstname, lastname, username, password, email:lowercaseEmail });
             setMessage(response.data.message);
             if(response.data.success){
                 navigate("/home");
