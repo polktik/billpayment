@@ -156,7 +156,7 @@ app.post("/register", (req, res) => {
             
         }
     });
-  }); /////bug ถ้าไม่มี ข้อมูล เช่นใส่ username ที่ไม่มีใน DB
+  }); /////bug ถ้าไม่มี ข้อมูล เช่นใส่ username ที่ไม่มีใน DB ////
 
 
 // Existing /sendOTP endpoint
