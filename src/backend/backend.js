@@ -143,11 +143,13 @@ app.post("/register", (req, res) => {
                 }
                 if(password){
                     console.log("password match");
+                    res.status(200).json({ success:true });
                 }else{
                     console.log("password does not match!");
+                    res.status(200).json({ success:false });
                 }
             });
-            res.status(200).json({ success:true });
+            
         }
     });
   });

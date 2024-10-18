@@ -18,9 +18,14 @@ export default function Signin() {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3309/register', { firstname, lastname, username, password, email });
+            const response = await axios.post('http://localhost:3309/login', { firstname, lastname, username, password, email });
             setMessage(response.data.message);
-            navigate("/home");
+            if(response.data.success){
+                navigate("/home");
+            }else{
+                alert("incorrect input please try again!!");
+            }
+
 
     } catch (error) {
         if (error.response) {
