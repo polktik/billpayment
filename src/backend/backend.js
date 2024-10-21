@@ -85,23 +85,6 @@ function authenticateToken(req, res, next) {
 
 
 
-app.get("/getuser", (req, res) => {
-  const username = req.query.username;
-
-  const query = "SELECT user_id FROM users WHERE username = ?";
-  db.query(query, [username], (err, results) => {
-      if (err) {
-          console.error("Error querying:", err);
-          return res.status(500).json({ error: "Internal server error" });
-      }
-
-      if (results.length > 0) {
-          res.json({ user_id: results[0].user_id });
-      } else {
-          res.status(404).json({ error: "User not found" });
-      }
-  });
-});
 
 
 // REGISTER
@@ -317,6 +300,25 @@ app.put("/resetPassword",(req,res)=>{
   });
 });
 });
+
+app.get("/getuser", (req, res) => {
+  const username = req.query.username;
+
+  const query = "SELECT user_id FROM users WHERE username = ?";
+  db.query(query, [username], (err, results) => {
+      if (err) {
+          console.error("Error querying:", err);
+          return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.length > 0) {
+          res.json({ user_id: results[0].user_id });
+      } else {
+          res.status(404).json({ error: "User not found" });
+      }
+  });
+});
+
 
 /////////////// waiting for front end //////////////user data section////////////
 
