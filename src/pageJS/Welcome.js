@@ -5,6 +5,8 @@ import "../pageCSS/Welcome.css";
 
 export default function Welcome() {
    const navigate = useNavigate();
+   const token = localStorage.getItem("token");
+   console.log("token after signout",token);
 
    const goSignin = () => {
       navigate("/signin");

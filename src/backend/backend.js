@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 var mysql = require('mysql2');
 const cors = require('cors');
 const nodemailer = require('nodemailer'); 
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+
+require("dotenv").config();
 
 const app = express();
 const port = 3309;
@@ -31,7 +35,7 @@ app.use((req,res,next)=>{
 });
 app.use(express.json());
 
-require("dotenv").config();
+
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -53,6 +57,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const JWT_SECRET = crypto.randomBytes(64).toString('hex');
 
 // เชื่อมต่อกับ MySQL
 db.connect((err) => {
@@ -62,6 +67,21 @@ db.connect((err) => {
     console.log("Connected to MySQL database");
   }
 });
+
+
+// Middleware for token authentication
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) return res.sendStatus(401);
+  
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+  });
+}
 
 
 
@@ -123,43 +143,55 @@ app.post("/register", (req, res) => {
   });
 
 
-  //LOGIN
-  app.post("/login",(req,res) => {
-    let request = req.body;
-    console.log("frontend data",req.body);
-    console.log("data from frontend username",request.username,"password",request.password);
-    const query = 'SELECT username, password_hash FROM users WHERE username = "'+ request.username +'"';
+// LOGIN
+app.post("/login", (req, res) => {
+  let request = req.body;
+  console.log("frontend data", req.body);
+  console.log("data from frontend username", request.username, "password", request.password);
 
-    db.query(query,(err,results)=>{
-        if(err){
-            console.error("Error querying MYSQL:",err);
-            res.status(500).json({error:"Internal Server Error" });
-        }else if (!results.length) {
+  const query = 'SELECT username, password_hash FROM users WHERE username = ?';
+
+  db.query(query, [request.username], (err, results) => {
+      if (err) {
+          console.error("Error querying MySQL:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (!results.length) {
           console.log("No user found with the provided username");
-          res.status(404).json({ error: "User does not exist" });
-        }else{
-            console.log("data from backend : ",results)
-            const passExtract = results[0];
-            const hashedPassword = passExtract.password_hash;
-            console.log("query from SQL",hashedPassword);
+          return res.status(404).json({ error: "User does not exist" });
+      }
 
-            bcrypt.compare(request.password,hashedPassword,(err, password) =>{
-                if(err){
-                    console.error("Error comparing password");
-                    return;
-                }
-                if(password){
-                    console.log("password match");
-                    res.status(200).json({ success:true });
-                }else{
-                    console.log("password does not match!");
-                    res.status(200).json({succes:false});
-                }
-            });
-            
-        }
-    });
-  }); /////bug ถ้าไม่มี ข้อมูล เช่นใส่ username ที่ไม่มีใน DB ////
+      console.log("Data from backend: ", results);
+      const passExtract = results[0];
+      const hashedPassword = passExtract.password_hash;
+      console.log("Query from SQL", hashedPassword);
+
+      bcrypt.compare(request.password, hashedPassword, (err, isMatch) => {
+          if (err) {
+              console.error("Error comparing password");
+              return res.status(500).json({ error: "Internal Server Error" });
+          }
+
+          if (isMatch) {
+              console.log("Password match");
+              const token = jwt.sign({ username: request.username }, JWT_SECRET, { expiresIn: '1h' });
+              console.log("toekn",token);
+              return res.status(200).json({ success: true, token });
+          } else {
+              console.log("Password does not match!");
+              return res.status(401).json({ success: false, error: "Incorrect password" });
+          }
+      });
+  });
+});
+
+
+
+// Create a protected route
+app.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: 'This is a protected route', user: req.user });
+});
 
 
 // Existing /sendOTP endpoint
