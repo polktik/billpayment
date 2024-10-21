@@ -56,9 +56,6 @@ return (<div className="register-page">
             <div className="email-box">
                 <input type="text" placeholder="Email" value={email} onChange={(e)=>setEmail(e.target.value)} required />
             </div>
-            <div className="forgot-password">
-                <a href="/forgot">Forgot Password?</a>
-            </div>
             <button type="submit" className="register-button">Register</button>
             {message && <p>{message}</p>} {/* แสดงข้อความแจ้งเตือน */}
         </form>

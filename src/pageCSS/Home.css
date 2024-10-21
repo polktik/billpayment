@@ -23,6 +23,7 @@
     align-items: center;
     gap: 10px;
     border: 1px solid #cccccc;
+    border-radius: 10px;
 }
 
 .hom-profile-img {

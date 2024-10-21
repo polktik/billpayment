@@ -27,13 +27,15 @@
     background: linear-gradient(to bottom, #6e6e6e, #c4c4c4); /* สีพื้นหลังไล่สี */
 }
 
-
 .register-box {
     background-color: #3e3e3e;
+    margin-bottom: 90px;
     width: 735px;
-    height: 925px;
+    height: 755px;
+    border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
+    padding-bottom: 10px;
 }
 
 .register-box h2 {
@@ -50,118 +52,52 @@
 
 .register-box h2::after {
     content: '';
-    position: flex;
+    position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 734.5px;
     height: 3px;
-    background-color: #555;
+    background-color: #fff;
 }
 
-.firstname-box {
+.firstname-box,
+.lastname-box,
+.username-box,
+.password-box,
+.email-box {
     margin-bottom: 20px;
 }
 
-.firstname-box input {
-    width: 590px;
-    height: 72px;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    margin-top: 20px;
-    font-size: 32px;
-    font-family: 'fontMedium', sans-serif;
-}
-
-.lastname-box {
-    position: relative;
-}
-
-.lastname-box input {
-    width: 590px;
-    height: 72px;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 32px;
-    font-family: 'fontMedium', sans-serif;
-}
-
-.username-box {
-    position: relative;
-}
-
-.username-box input {
-    width: 590px;
-    height: 72px;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 32px;
-    font-family: 'fontMedium', sans-serif;
-}
-
-.password-box {
-    position: relative;
-}
-
-.password-box input {
-    width: 590px;
-    height: 72px;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 32px;
-    font-family: 'fontMedium', sans-serif;
-}
-
-.email-box {
-    position: relative;
-}
-
+.firstname-box input,
+.lastname-box input,
+.username-box input,
+.password-box input,
 .email-box input {
     width: 590px;
     height: 72px;
-    margin-top: 3%;
     padding: 10px;
     border: none;
     border-radius: 4px;
+    margin-top: 5px;
     font-size: 32px;
     font-family: 'fontMedium', sans-serif;
-}
-
-.forgot-password {
-    text-align: left;
-    margin-bottom: 20px;
-    padding: 22px 62px;
-}
-
-.forgot-password a {
-    color: #14128F;
-    text-decoration: none;
-    font-size: 24px;
-    font-family: 'fontRegular', sans-serif;
-}
-
-.forgot-password a:hover {
-    text-decoration: underline;
 }
 
 .register-button {
     background-color: #4D81E4;
     color: white;
-    border: 4px solid #ffffff;
+    border: 4px solid #fff;
     border-radius: 4px;
     width: 272px;
     height: 76px;
     padding: auto;
     font-size: 40px;
     cursor: pointer;
-    font-family: 'fontMedium', sans-serif;
+    font-family: 'fontBold', sans-serif;
+    margin-top: 30px;
 }
 
 .register-button:hover {
     background-color: #3c6bd4;
 }
-/*test*/
