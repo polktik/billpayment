@@ -18,6 +18,7 @@ export default function Signin() {
             if (response.data.success) {
                 // Save token to localStorage
                 localStorage.setItem('token', response.data.token);
+                localStorage.setItem('username',username);
 
                 // Navigate to the home page after successful login
                 navigate("/home");

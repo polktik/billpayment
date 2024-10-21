@@ -30,16 +30,44 @@ export default function Home() {
         };
 
         fetchProtectedData();
-    }, []); // Empty dependency array means this runs once when the component mounts
+
+        const fetchUserData = async () => {
+            const username = localStorage.getItem('username');
+            console.log("username:", username);
+        
+            try {
+                const response = await axios.get('http://localhost:3309/getuser', {
+                    params: { username }
+                });
+                if (response.data && response.data.user_id) {
+                    localStorage.setItem("user_id", response.data.user_id);
+                } else {
+                    alert("User ID not found in response.");
+                }
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    alert('Cannot find user with that username.');
+                } else {
+                    alert("An error occurred: " + error.message); 
+                }
+            }
+        };
+
+        fetchUserData();
+        
+    }, []);
+    const signout = () =>{
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        localStorage.removeItem("user_id");
+        navigate("/");
+    }
 
     if (error) {
         return <div>{error}</div>;
     }
 
-    const signout = () =>{
-        localStorage.removeItem("token");
-        navigate("/");
-    }
+
 
     return(
     <div className="hom-main">
