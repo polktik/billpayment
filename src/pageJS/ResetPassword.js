@@ -20,6 +20,7 @@ const ResetPassword = () => {
             const response = await axios.put(`${URL}/resetPassword`, { email, resetPassword: passwordToReset });
             alert(response.data.message);
             navigate("/");
+            localStorage.removeItem('email');
 
         } catch (error) {
             if (error.response) {
