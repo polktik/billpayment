@@ -20,6 +20,7 @@ export default function Signin() {
                 
                 localStorage.setItem('token', response.data.token);
                 localStorage.setItem('username',username);
+                navigate("/home");
                 // Swal.fire({
                 //     title: 'SUCCESS',
                 //     text: 'Sign in successfully!',
@@ -39,7 +40,7 @@ export default function Signin() {
                 //     navigate("/signin");
                 //     window.location.reload();
                 // });
-                // alert("Username or Password does not match please try again!!");
+                alert("Username or Password does not match please try again!!");
             }
 
 
@@ -54,7 +55,7 @@ export default function Signin() {
                 //     navigate("/signin");
                 //     window.location.reload();
                 // });
-                alert('An error occurred. Please try again later.');
+                alert('No user found');
             } else {
                 alert('An error occurred. Please try again later.');
             }
