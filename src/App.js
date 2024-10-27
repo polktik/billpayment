@@ -4,6 +4,12 @@ import Welcome from './pageJS/Welcome';
 import Signin from './pageJS/Signin';
 import Register from './pageJS/Register';
 import Home from './pageJS/Home';
+import Addbill from './pageJS/Addbill';
+import AddMobile from './pageJS/AddMobile';
+import AddCredit from './pageJS/AddCredit';
+import AddUtil from './pageJS/AddUtil';
+import Removebill from './pageJS/Removebill';
+import Updatebill from './pageJS/Updatebill';
 import Forgot from './pageJS/Forgot';
 import ResetPassword from './pageJS/ResetPassword';
 import './App.css';
@@ -18,6 +24,12 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/forgot" element={<Forgot/>}/>
         <Route path="/resetpassword" element={<ResetPassword/>}/>
+        <Route path="/addbill" element={<Addbill/>}/>
+        <Route path="/addmobile" element={<AddMobile/>}/>
+        <Route path="/addcredit" element={<AddCredit/>}/>
+        <Route path="/addutil" element={<AddUtil/>}/>
+        <Route path="/removebill" element={<Removebill/>}/>
+        <Route path="/updatebill" element={<Updatebill/>}/>
       </Routes>
     </Router>
   );
