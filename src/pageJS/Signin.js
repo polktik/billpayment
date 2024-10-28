@@ -7,7 +7,6 @@ import Swal from 'sweetalert2'
 export default function Signin() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async (event) => {
@@ -15,50 +14,33 @@ export default function Signin() {
 
         try {
             const response = await axios.post('http://localhost:3309/login', { username, password });
-            
+
             if (response.data.success) {
-                
                 localStorage.setItem('token', response.data.token);
-                localStorage.setItem('username',username);
-                navigate("/home");
-                // Swal.fire({
-                //     title: 'SUCCESS',
-                //     text: 'Sign in successfully!',
-                //     icon: 'success',
-                //     confirmButtonText: 'Ok'
-                // }).then(() => {
-                //     navigate("/home");
-                // });
-                
+                localStorage.setItem('username', username);
+                Swal.fire({
+                    title: 'SUCCESS',
+                    text: 'Sign in successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                }).then(() => {
+                    navigate("/home");
+                });
             } else {
-                // Swal.fire({
-                //     title: 'UNSUCCESS!',
-                //     html: 'Invalid username or password!!<br/> Please try again.',
-                //     icon: 'error',
-                //     confirmButtonText: 'Ok'
-                // }).then(() => {
-                //     navigate("/signin");
-                //     window.location.reload();
-                // });
-                alert("Username or Password does not match please try again!!");
+                Swal.fire({
+                    title: 'UNSUCCESSFUL!',
+                    html: 'Invalid username or password!<br/> Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
             }
-
-
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.error) {
-                // Swal.fire({
-                //     title: 'Unsuccess!',
-                //     html: 'Invalid username or password!!<br/> Please try again.',
-                //     icon: 'error',
-                //     confirmButtonText: 'Ok'
-                // }).then(() => {
-                //     navigate("/signin");
-                //     window.location.reload();
-                // });
-                alert('No user found');
-            } else {
-                alert('An error occurred. Please try again later.');
-            }
+            Swal.fire({
+                title: 'Unsuccessful!',
+                html: 'Invalid username or password!<br/> Please try again.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
         }
     };
 
@@ -93,7 +75,7 @@ export default function Signin() {
                         <a onClick={handleForgotPassword}>Forgot Password?</a>
                     </div>
                     <button type="submit" className="sig-signin-button">Sign in</button>
-                    {message && <p>{message}</p>}
+                    {/* {message && <p>{message}</p>} */}
                 </form>
             </div>
         </div>
