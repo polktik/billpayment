@@ -272,7 +272,7 @@ export default function Addbill() {
             </div>
             <div className="add-content-box">
                         <div className="cre-section">
-                            <div className="add-section-title mobile-title">Mobile details</div>
+                            <div className="add-section-title mobile-title">Cradit card details</div>
                             <div className="cre-container">
                                 <div className="provider">
                                     <button
