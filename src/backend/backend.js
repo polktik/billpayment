@@ -405,8 +405,9 @@ app.delete("/delete_user_bills", (req, res) => {
           return res.status(500).json({ error: "An error occurred while deleting bill data from the database" });
       }
 
+      const currentTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
       const log = "INSERT INTO notification_logs (action, bill_name, bill_type, provider, number_or_address, timestamp, user_id, status) VALUES ('Delete', ?, ?, ?, ?, ?, ?,?)";
-      db.query(log, [name, bill_type, provider, numberORaddress, new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }), user_id, status], (err, results) => {
+      db.query(log, [name, bill_type, provider, numberORaddress, currentTimestamp, user_id, status], (err, results) => {
           if (err) {
               console.error("Error inserting logs:", err);
               return res.status(500).json({ error: "An error occurred while inserting data to logs" });
@@ -432,7 +433,7 @@ app.put("/update_user_bills", (req, res) => {
   const name = req.body.bill_name;
   const status = req.body.status;
   const date = req.body.bill_date;
-  const date_for_logs = new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
+
 
   const query = "UPDATE bills SET bill_date = ?, status = ? WHERE user_id = ? AND bill_id = ?";
   db.query(query, [date, status, user_id, bill_id], (err, results) => {
@@ -441,8 +442,9 @@ app.put("/update_user_bills", (req, res) => {
           return res.status(500).json({ error: "An error occurred while updating bill data in the database" });
       }
 
+      const currentTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
       const log = "INSERT INTO notification_logs (action, bill_name, bill_type, provider, number_or_address, timestamp, user_id, status) VALUES ('Update', ?, ?, ?, ?, ?, ?, ?)";
-      db.query(log, [name, bill_type, provider, numberORaddress, date_for_logs, user_id, status], (err, results) => {
+      db.query(log, [name, bill_type, provider, numberORaddress, currentTimestamp, user_id, status], (err, results) => {
           if (err) {
               console.error("Error inserting logs:", err);
               return res.status(500).json({ error: "An error occurred while inserting data to logs" });
