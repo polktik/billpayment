@@ -154,7 +154,7 @@ export default function Home() {
                                         <th>Bill Name</th>
                                         <th>Provider</th>
                                         <th>Number/Address</th>
-                                        <th>Payment</th>
+                                        <th>Payment (Baht)</th>
                                         <th>Frequency</th>
                                         <th>Due Date</th>
                                     </tr>
