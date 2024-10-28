@@ -303,6 +303,7 @@ app.put("/resetPassword",(req,res)=>{
 
 app.get("/getuser", (req, res) => {
   const username = req.query.username;
+  console.log("username = ",req.query);
 
   const query = "SELECT user_id FROM users WHERE username = ?";
   db.query(query, [username], (err, results) => {
@@ -323,8 +324,10 @@ app.get("/getuser", (req, res) => {
 /////////////// waiting for front end //////////////user data section////////////
 
 app.get("/notification",(req,res)=>{
+  console.log("logs",req.query);
   const user_id = req.query.user_id;
-  const query = "SELECT action, bill_name, bill_type, provider, number_or_address, timestamp FROM notifation_logging WHERE user_id = ?";
+  console.log("user_id =",user_id);
+  const query = "SELECT action, bill_name, bill_type, provider, number_or_address, timestamp FROM notification_logs WHERE user_id = ?";
   db.query(query,[user_id],(err,results)=>{
     if(err){
       console.error("error querying");
@@ -353,10 +356,11 @@ app.post("/insert_user_bill", (req, res) => {
       if (err) {
           console.error("Error querying:", err);
           return res.status(500).json({ error: "An error occurred while inserting data into the database" });
-      } 
-      
+      }
+
+      const currentTimestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
       const logs = "INSERT INTO notification_logs (action, bill_name, bill_type, provider, number_or_address, timestamp, user_id, status) VALUES ('Insert', ?, ?, ?, ?, ?, ?, 'Unpaid')";
-      db.query(logs, [name, bill_type, provider, numberORaddress, new Date(), user_id], (err, results) => {
+      db.query(logs, [name, bill_type, provider, numberORaddress, currentTimestamp, user_id], (err, results) => {
           if (err) {
               console.error("Error querying logs:", err);
               return res.status(500).json({ error: "An error occurred while inserting data into the logs" });
@@ -370,7 +374,7 @@ app.post("/insert_user_bill", (req, res) => {
 app.get("/get_user_bills", (req,res)=>{
   console.log("data from user",req.query);
   const user_id = req.query.user_id;
-  const query = "SELECT * FROM bills WHERE user_id = ?";
+  const query = "SELECT bill_type, providers, number_or_address, total_payment, frequency_type, bill_name, bill_date, status FROM bills WHERE user_id = ?";
   db.query(query,[user_id],(err,results)=>{
     if(err){
       console.error("Error querying",err);
@@ -402,7 +406,7 @@ app.delete("/delete_user_bills", (req, res) => {
       }
 
       const log = "INSERT INTO notification_logs (action, bill_name, bill_type, provider, number_or_address, timestamp, user_id, status) VALUES ('Delete', ?, ?, ?, ?, ?, ?,?)";
-      db.query(log, [name, bill_type, provider, numberORaddress, new Date(), user_id, status], (err, results) => {
+      db.query(log, [name, bill_type, provider, numberORaddress, new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }), user_id, status], (err, results) => {
           if (err) {
               console.error("Error inserting logs:", err);
               return res.status(500).json({ error: "An error occurred while inserting data to logs" });
@@ -428,6 +432,7 @@ app.put("/update_user_bills", (req, res) => {
   const name = req.body.bill_name;
   const status = req.body.status;
   const date = req.body.bill_date;
+  const date_for_logs = new Date().toLocaleString('en-US', { timeZone: 'Asia/Bangkok' });
 
   const query = "UPDATE bills SET bill_date = ?, status = ? WHERE user_id = ? AND bill_id = ?";
   db.query(query, [date, status, user_id, bill_id], (err, results) => {
@@ -437,7 +442,7 @@ app.put("/update_user_bills", (req, res) => {
       }
 
       const log = "INSERT INTO notification_logs (action, bill_name, bill_type, provider, number_or_address, timestamp, user_id, status) VALUES ('Update', ?, ?, ?, ?, ?, ?, ?)";
-      db.query(log, [name, bill_type, provider, numberORaddress, new Date(), user_id, status], (err, results) => {
+      db.query(log, [name, bill_type, provider, numberORaddress, date_for_logs, user_id, status], (err, results) => {
           if (err) {
               console.error("Error inserting logs:", err);
               return res.status(500).json({ error: "An error occurred while inserting data to logs" });

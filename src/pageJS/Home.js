@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../pageCSS/Home.css";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 
 export default function Home() {
     const [protectedData, setProtectedData] = useState(null);
+    const [reminders, setReminders] = useState([]);
+    const [notifications, setNotifications] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,7 +26,6 @@ export default function Home() {
                 });
                 setProtectedData(response.data);
                 fetchUserData();
-
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     unauthorizedRedirect();
@@ -62,70 +63,153 @@ export default function Home() {
 
     const addbill = () => {
         navigate("/addbill");
-    }
-
+    };
 
     const fetchUserData = async () => {
         const username = localStorage.getItem('username');
         console.log("username:", username);
-      
+
         try {
             const response = await axios.get('http://localhost:3309/getuser', {
                 params: { username }
             });
             if (response.data && response.data.user_id) {
                 localStorage.setItem("user_id", response.data.user_id);
-                const user_id = localStorage.getItem("user_id");
-                console.log("user_id =",user_id);
+                const user_id = response.data.user_id;
+                fetchNotifications(user_id);
+                fetchUserBills(user_id);
             } else {
                 alert("User ID not found in response.");
             }
         } catch (error) {
             if (error.response && error.response.status === 404) {
-              alert("Unauthorize message");
+                alert("Unauthorized message");
             } else {
-                alert("An error occurred: " + error.message); 
+                alert("An error occurred: " + error.message);
             }
         }
-      };
+    };
+
+    const fetchNotifications = async (user_id) => {
+        try {
+            const response = await axios.get('http://localhost:3309/notification', {
+                params: { user_id }
+            });
+            
+            // Get only the newest 20 notifications
+            const latestNotifications = response.data.slice(0, 20); 
+            setNotifications(latestNotifications);
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to load notifications.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        }
+    };
+
+    const fetchUserBills = async (user_id) => {
+        try{
+            const response = await axios.get('http://localhost:3309/get_user_bills',{
+                params:{user_id}
+            });
+            const latestUserBills = response.data.slice(0,20);
+            setReminders(latestUserBills);
+        }catch(error){
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to load notifications.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+        }
+    };
 
     if (!protectedData) {
         return null;
     }
-    return(
-    <div className="hom-main">
-        <div className="hom-leftbar">
-            <img className="hom-profile-img" src="https://via.placeholder.com/150" alt="profile-pic"/>
-            <button className="hom-btn add" onClick={addbill}>Add Bill</button>
-            <button className="hom-btn remove">Remove Bill</button>
-            <button className="hom-btn update">Update Bill</button>
-            <button className="hom-btn signout" onClick={signout}>Sign out</button>
-        </div>
-        <div className="hom-content-box">
-            <div className="hom-section">
-                <h3 className="hom-section-title reminder-title">Bill Reminder</h3>
-                <div className="reminder-container">
-                    <div className="reminder-list">
-                        
-                    </div>
 
-                </div>
+    return (
+        <div className="hom-main">
+            <div className="hom-leftbar">
+                <img className="hom-profile-img" src="https://via.placeholder.com/150" alt="profile-pic" />
+                <button className="hom-btn add" onClick={addbill}>Add Bill</button>
+                <button className="hom-btn remove">Remove Bill</button>
+                <button className="hom-btn update">Update Bill</button>
+                <button className="hom-btn signout" onClick={signout}>Sign out</button>
             </div>
 
-            <div className="hom-section">
-                <h3 className="hom-section-title noti-title">Notification</h3>
-                <div className="noti-container">
-                    <div className="noti-list">
-
+            <div className="hom-content-box">
+                <div className="hom-section">
+                    <h3 className="hom-section-title reminder-title">Bill Reminder</h3>
+                    <div className="reminder-container">
+                        <div className="reminder-list">
+                        <table>
+                                <thead>
+                                    <tr>
+                                        <th>Status</th>
+                                        <th>Bill Type</th>
+                                        <th>Bill Name</th>
+                                        <th>Provider</th>
+                                        <th>Number/Address</th>
+                                        <th>Payment</th>
+                                        <th>Frequency</th>
+                                        <th>Due Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {reminders.map((reminder, index) => (
+                                        <tr key={index}>
+                                            <td>{reminder.status}</td>
+                                            <td>{reminder.bill_type}</td>
+                                            <td>{reminder.bill_name}</td>
+                                            <td>{reminder.providers}</td>
+                                            <td>{reminder.number_or_address}</td>
+                                            <td>{reminder.total_payment}</td>
+                                            <td>{reminder.frequency_type}</td>
+                                            <td>{reminder.bill_date}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-
                 </div>
 
+                <div className="hom-section">
+                    <h3 className="hom-section-title noti-title">Notification</h3>
+                    <div className="noti-container">
+                        <div className="noti-list">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>Bill Name</th>
+                                        <th>Bill Type</th>
+                                        <th>Provider</th>
+                                        <th>Number/Address</th>
+                                        <th>Timestamp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {notifications.map((notification, index) => (
+                                        <tr key={index}>
+                                            <td>{notification.action}</td>
+                                            <td>{notification.bill_name}</td>
+                                            <td>{notification.bill_type}</td>
+                                            <td>{notification.provider}</td>
+                                            <td>{notification.number_or_address}</td>
+                                            <td>{new Date(notification.timestamp).toLocaleString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-        
-    
-        
-    </div>);
+    );
 }
