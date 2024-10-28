@@ -18,6 +18,8 @@ export default function Addbill() {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedProvider, setSelectedProvider] = useState('');
     const [protectedData, setProtectedData] = useState(null);
+    const [mobileNumber, setMobileNumber]= useState('');
+    const [scheduleName, setScheduleName] = useState('');
 
     useEffect(() => {
         const fetchProtectedData = async () => {
@@ -34,7 +36,7 @@ export default function Addbill() {
                     }
                 });
                 setProtectedData(response.data);
-                fetchUserData();
+
 
             } catch (error) {
                 if (error.response && error.response.status === 401) {
@@ -64,31 +66,61 @@ export default function Addbill() {
         fetchProtectedData();
     }, [navigate]);
 
-    const fetchUserData = async () => {
-        const username = localStorage.getItem('username');
-        console.log("username:", username);
-      
-        try {
-            const response = await axios.get('http://localhost:3309/getuser', {
-                params: { username }
-            });
-            if (response.data && response.data.user_id) {
-                localStorage.setItem("user_id", response.data.user_id);
-            } else {
-                alert("User ID not found in response.");
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-              alert("Unauthorize message");
-            } else {
-                alert("An error occurred: " + error.message); 
-            }
-        }
+    const handleInputChange = (e) => {
+        setScheduleName(e.target.value);
       };
 
-    if (!protectedData) {
-        return null;
-    }
+    const handleMobileInput = (e) => {
+        setMobileNumber(e.target.value);
+    };
+    const handleDateChange = (e) => {
+        setSelectedDate(e.target.value);
+      };
+
+    //   const handleSetTo28th = () => {
+    //     setSelectedDate("28");
+    //   };
+
+    const handleInput = async (event)=>{
+        event.preventDefault();
+        const user_id = localStorage.getItem("user_id");
+        const type = "Mobile";
+        const provider = selectedProvider;
+        const num = mobileNumber;
+        const payment = null;
+        const date = selectedDate
+        const name = scheduleName;
+        console.log("user_id = ",user_id);
+        try{
+            const response = await axios.post("http://localhost:3309/insert_user_bill",{user_id, type, provider, num, payment, frequency, name, date});
+            console.log(response.data);
+            if(response.data.success){
+                Swal.fire({
+                    title: 'SUCCESS',
+                    text: 'Insert data successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                });
+            }else{
+                Swal.fire({
+                    title: 'UNSUCCESSFUL!',
+                    html: 'Error to insert data <br/> Please try again.',
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
+            }
+        }catch (error){
+            Swal.fire({
+                title: 'Unsuccessful!',
+                html: 'Invalid username or password!<br/> Please try again.',
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
+            
+        }
+
+    };
+
 
     const goAddMobile = () => {
         navigate("/addmobile")
@@ -125,13 +157,19 @@ export default function Addbill() {
         }
     };
 
+    useEffect(() => {
+        if (frequency === 'Monthly') {
+          setSelectedDate('28');
+        }
+      }, [frequency]);
+
     const renderFrequencyInput = () => {
         switch (frequency) {
             case 'Once':
                 return (
                     <div className="freq-detail">
                         <div>
-                            <input className="schedule-name" type="text" placeholder="Schedule Name." required />
+                            <input className="schedule-name" type="text" placeholder="Schedule Name." required value={scheduleName} onChange={handleInputChange}/>
                             <img src={icrename} alt="Contact Icon" className="icon-rename" />
                         </div>
 
@@ -157,11 +195,12 @@ export default function Addbill() {
                 return (
                     <div className="freq-detail">
                         <div>
-                            <input className="schedule-name" type="text" placeholder="Schedule Name." required />
+                            <input className="schedule-name" type="text" placeholder="Schedule Name." required  value={scheduleName} onChange={handleInputChange}/>
                             <img src={icrename} alt="Contact Icon" className="icon-rename" />
                         </div>
                         <div className="date-container">
-                            <select className="date">
+                            <select className="date" value={selectedDate} onChange={handleDateChange}>
+                                <option value="" disabled selected>Select a day</option>
                                 <option value="Sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -179,7 +218,7 @@ export default function Addbill() {
                 return (
                     <div className="freq-detail">
                         <div>
-                            <input className="schedule-name" type="text" placeholder="Schedule Name." required />
+                            <input className="schedule-name" type="text" placeholder="Schedule Name." required  value={scheduleName} onChange={handleInputChange} />
                             <img src={icrename} alt="Contact Icon" className="icon-rename" />
                         </div>
                         <div className="date-container">
@@ -192,6 +231,10 @@ export default function Addbill() {
                 return null;
         }
     };
+
+    if (!protectedData) {
+        return null;
+    }
 
     return (
         <div className="add-main">
@@ -243,7 +286,7 @@ export default function Addbill() {
                                     </button>
 
                                     <div className="mobile-input">
-                                        <input className="mobile-num" type="tel" placeholder="Enter Mobile No." required />
+                                        <input className="mobile-num" type="tel" placeholder="Enter Mobile No." required value = {mobileNumber} onChange={handleMobileInput} />
                                         <img src={iccontact} alt="Contact Icon" className="icon-contact" />
                                     </div>
                                 </div>
@@ -276,7 +319,7 @@ export default function Addbill() {
                             </div>
                             <div className="btn-container">
                                 <button className="cre-back-btn" onClick={goAddbill}>Back</button>
-                                <button className="proceed-btn">Proceed</button>
+                                <button className="proceed-btn" onClick={handleInput}>Proceed</button>
                             </div>
                         </div>
                     </div>

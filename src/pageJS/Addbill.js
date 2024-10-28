@@ -29,7 +29,6 @@ export default function Addbill() {
                     }
                 });
                 setProtectedData(response.data);
-                fetchUserData();
 
             } catch (error) {
                 if (error.response && error.response.status === 401) {
@@ -59,31 +58,12 @@ export default function Addbill() {
         fetchProtectedData();
     }, [navigate]);
 
-    const fetchUserData = async () => {
-        const username = localStorage.getItem('username');
-        console.log("username:", username);
-      
-        try {
-            const response = await axios.get('http://localhost:3309/getuser', {
-                params: { username }
-            });
-            if (response.data && response.data.user_id) {
-                localStorage.setItem("user_id", response.data.user_id);
-            } else {
-                alert("User ID not found in response.");
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-              alert("Unauthorize message");
-            } else {
-                alert("An error occurred: " + error.message); 
-            }
-        }
-      };
 
     if (!protectedData) {
         return null;
     }
+
+
 
     const goAddMobile = () => {
         navigate("/addmobile")

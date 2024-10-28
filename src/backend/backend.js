@@ -362,7 +362,7 @@ app.post("/insert_user_bill", (req, res) => {
               return res.status(500).json({ error: "An error occurred while inserting data into the logs" });
           } 
           console.log("Insert data successfully");
-          return res.status(200).json({ message: "Data and logs inserted successfully" });
+          return res.status(200).json({ success:true });
       });
   });
 });
@@ -456,4 +456,3 @@ app.listen(port, () => {
   });
 
 
-/////////// เขียน forgot password
