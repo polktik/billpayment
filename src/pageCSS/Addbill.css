@@ -93,7 +93,15 @@
     background-color: #D9D9D9;
     border-radius: 10px;
     border: 1px solid #cccccc;
-    height: 700px;
+    height: 720px;
+    padding: 20px 20px;
+}
+
+.cre-section {
+    background-color: #D9D9D9;
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    height: 720px;
     padding: 20px 20px;
 }
 
@@ -131,13 +139,20 @@
     margin: 10px;
     background-color: white;
     width: 1200px;
-    height: 610px;
+    height: 640px;
+}
+
+.cre-container {
+    margin: 10px;
+    background-color: white;
+    width: 1200px;
+    height: 640px;
 }
 
 .back-btn {
     width: 260px;
-    margin-top: 60px;
-    margin-left: -20px;
+    margin-top: 30px;
+    margin-left: -25px;
     height: 95px;
     border: 1px solid #FF6500;
     border-radius: 10px;
@@ -151,10 +166,34 @@
     cursor: pointer;
 }
 
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    /* padding: 0 20px; Adjust padding to control space between buttons and edges */
+    /* margin-top: 30px; */
+}
+
+.cre-back-btn {
+    width: 260px;
+    margin-top: 30px;
+    margin-left: -25px;
+    height: 95px;
+    border: 1px solid #FF6500;
+    border-radius: 10px;
+    color: #FF6500;
+    background-color: #0B192C;
+    font-family: 'fontBold', sans-serif;
+    font-size: 64px;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
 .proceed-btn {
-    width: 370px;
-    margin-top: 60px;
-    margin-left: -20px;
+    width: 350px;
+    margin-top: 30px;
     height: 95px;
     border: 1px solid #000000;
     border-radius: 10px;
@@ -168,7 +207,7 @@
 }
 
 .provider {
-    padding-top: 30px;
+    padding-top: 0;
     margin-left: 40px;
 }
 
@@ -185,8 +224,36 @@
     margin-top: 30px;
 }
 
+.kbank {
+    width: 280px;
+}
+
+.aeon {
+    width: 420px;
+}
+
+.water {
+    width: 180px;
+}
+
+.elec {
+    width: 290px;
+}
+
+.cre-btn {
+    font-family: 'fontBold', sans-serif;
+    font-size: 32px;
+    background-color: #232323;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-right: 20px;
+    margin-top: 30px;
+}
+
 .selected {
-    background-color: #0F9E6C; /* Example background color for selected state */
+    background-color: #0F9E6C;
     color: white;
 }
 
