@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+import "../pageCSS/Resetpassword.css";
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');
@@ -18,19 +20,41 @@ const ResetPassword = () => {
     const resetPassword = async (passwordToReset) => {
         try {
             const response = await axios.put(`${URL}/resetPassword`, { email, resetPassword: passwordToReset });
-            alert(response.data.message);
-            navigate("/");
-            localStorage.removeItem('email');
+            Swal.fire({
+                title: 'SUCCESS',
+                text: response.data.message,
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then(() => {
+                navigate("/");
+                localStorage.removeItem('email');
+            });
+
 
         } catch (error) {
             if (error.response) {
                 if (error.response.data && error.response.data.error) {
-                    alert(error.response.data.error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response.data.error,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 } else {
-                    alert("Error: " + error.response.status);
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response.status,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 }
             } else {
-                alert(error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
             }
         }
     };
@@ -40,32 +64,42 @@ const ResetPassword = () => {
         if (password === checkPassword) {
             resetPassword(password);
         } else {
-            alert("Passwords do not match. Please try again.");
+            Swal.fire({
+                title: 'Error',
+                text: "Passwords do not match. Please try again.",
+                icon: 'error',
+                confirmButtonText: 'Ok'
+            });
         }
     };
 
     return (
-        <div>
-            <form onSubmit={checkPasswordMatch}>
-                <div>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Password"
-                    />
-                </div>
-                <div>
-                    <input
-                        type="password"
-                        value={checkPassword}
-                        onChange={(e) => setCheckPassword(e.target.value)}
-                        placeholder="Re-enter your password"
-                    />
-                </div>
-                <button type="submit">Proceed</button>
-            </form>
-        </div>
+<div className="pc-signin-page">
+    <div className="pc-signin-box">
+        <h2>Confirm Your Password</h2>
+        <form onSubmit={checkPasswordMatch}>
+            <div className="pc-password-box">
+                <input
+                    type="password"
+                    className="pc-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                />
+            </div>
+            <div className="pc-password-box">
+                <input
+                    type="password"
+                    className="pc-input"
+                    value={checkPassword}
+                    onChange={(e) => setCheckPassword(e.target.value)}
+                    placeholder="Re-enter your password"
+                />
+            </div>
+            <button type="submit" className="pc-signin-button">Proceed</button>
+        </form>
+    </div>
+</div>
     );
 };
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+import "../pageCSS/ForgotPassword.css";
 
 
 const OTPForm = () => {
@@ -12,20 +14,46 @@ const OTPForm = () => {
     const sendOTP = async () => {
         try {
             const response = await axios.post(URL + '/sendOTP', { email });
-            localStorage.setItem('email',email);
+            Swal.fire({
+                title: 'SUCCESS',
+                text: 'OTP send successfully!',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then(() => {
+                localStorage.setItem('email',email);
+            });
 
-            alert(response.data.message);
         } catch (error) {       
             if (error.response) {
                 if (error.response.status === 404) {
-                    alert("This email doesn't exist"); // Alert if email not found
+                    Swal.fire({
+                        title: 'Error',
+                        text: "This email doesn't exist",
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 } else if (error.response.data && error.response.data.error) {
-                    alert(error.response.data.error); // Alert the error message from server
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Server Error",
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 } else {
-                    alert('Error: ' + error.response.status); // Generic error alert with status
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response.status, // Generic error alert with status
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 }
             } else {
-                alert('Error sending OTP: ' + error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error sending OTP: ' + error.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
             }
         }
     };
@@ -34,41 +62,81 @@ const OTPForm = () => {
         console.log("code : ",votp);
         try {
             const response = await axios.post(URL +'/verifyOTP',{votp});
-            alert(response.data.message);
-            navigate("/resetpassword");
+            Swal.fire({
+                title: 'SUCCESS',
+                text: response.data.message,
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then(() => {
+                navigate("/resetpassword");
+            });
+
         }catch(error){
             if(error.response){
                 if(error.response.status === 404){
-                    alert("Verification denied");
+                    Swal.fire({
+                        title: 'Error',
+                        text: "Verification denied",
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 }else if(error.response.data && error.response.data.error){
-                    alert(error.response.data.error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response.data.error,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 }else{
-                    alert('Error: ' + error.response.status);
+                    Swal.fire({
+                        title: 'Error',
+                        text: error.response.status,
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
                 }
             }else{
-                alert('Error :' + error.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: error.message,
+                    icon: 'error',
+                    confirmButtonText: 'Ok'
+                });
             }
         }
     };
 
     return (
-        <div>
+<div className="fp-signin-page">
+    <div className="fp-signin-box">
+        <h2>Forgot Password</h2>
+        
+        <div className="fp-username-box">
             <input
                 type="email"
+                className="fp-input"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
             />
-            <button onClick={sendOTP}>Send OTP</button>
+        </div>
+
+        <button className="fp-signin-button" onClick={sendOTP}>Send OTP</button>
+        
+        <div className="fp-username-box">
             <input
                 type="password"
+                className="fp-input"
                 value={votp}
                 onChange={(e) => setVOTP(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Enter your OTP"
             />
-            <button onClick={verifyOTP}>Verify OTP</button>
-            
         </div>
+
+        <button className="fp-signin-button" onClick={verifyOTP}>Verify OTP</button>
+    </div>
+</div>
+
     );
 };
 
