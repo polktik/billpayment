@@ -7,11 +7,14 @@ const cors = require('cors');
 const nodemailer = require('nodemailer'); 
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
 
 require("dotenv").config();
 
 const app = express();
 const port = 3309;
+const upload = multer({ dest: 'uploads/' }); // Directory for storing uploaded files
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -486,6 +489,41 @@ app.get("/get_user_bills_for_update", (req,res)=>{
   });
 });
 
+app.get("/user_profile_data",(req,res)=>{
+  console.log("user_id",req.query.user_id);
+
+  const user_id = req.body.user_id;
+  const query  = "SELECT first_name, last_name, username, email, profile_pic FROM users WHERE user_id = ?";
+  db.query(query,[user_id],(err,results)=>{
+    if(err){
+      console.error("Error querying data",err);
+      return res.status(500).json({error:"An error occoured while getting fata from database"});
+    }else{
+      return res.status(200).json(results);
+    }
+  });
+}); ////////////// ใช้ useEffect ให้โหลดตอนเปิดหน้า
+
+app.put("/update_profilepics", upload.single('profile_pic'), (req, res) => {
+  console.log("data for update pics", req.body);
+  
+  const user_id = req.body.user_id;
+  const pics = req.file ? req.file.path : null; // Get the file path
+
+  if (!pics) {
+    return res.status(400).json({ error: "No file uploaded." });
+  }
+
+  const query = "UPDATE users SET profile_pic = ? WHERE user_id = ?";
+  db.query(query, [pics, user_id], (err, results) => {
+    if (err) {
+      console.error("Error updating data", err);
+      return res.status(500).json({ error: "An error occurred while updating data to database" });
+    } else {
+      return res.status(200).json(results); //////////////// ใช้กับปุ่ม upload profile picture
+    }
+  });
+});
 
 
 
