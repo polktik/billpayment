@@ -148,7 +148,7 @@ export default function Home() {
                 <img className="hom-profile-img" src="https://via.placeholder.com/150" alt="profile-pic" />
                 <button className="hom-btn add" onClick={goAddbill}>Add Bill</button>
                 <button className="hom-btn remove" onClick={goRemovebill}>Remove Bill</button>
-                <button className="hom-btn update" onClick={goRemovebill}>Update Bill</button>
+                <button className="hom-btn update" onClick={goUpdatebill}>Update Bill</button>
                 <button className="hom-btn signout" onClick={signout}>Sign out</button>
             </div>
 
