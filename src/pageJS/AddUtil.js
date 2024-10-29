@@ -46,9 +46,12 @@ export default function Addbill() {
                 } else {
                     Swal.fire({
                         title: 'Error',
-                        text: 'An error occurred while fetching data.',
+                        text: 'Please sign in to access this page.',
                         icon: 'error',
                         confirmButtonText: 'Ok'
+                    })
+                    .then(() => {
+                        navigate("/signin");
                     });
                 }
             }
@@ -79,6 +82,17 @@ export default function Addbill() {
 
       const handleInput = async (event)=>{
         event.preventDefault();
+
+        if (!selectedProvider || !address || !scheduleName || !selectedDate) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Please select a provider and fill out all required fields.',
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            });
+            return;
+        }
+
         const user_id = localStorage.getItem("user_id");
         const type = "Mobile";
         const provider = selectedProvider;
@@ -108,7 +122,7 @@ export default function Addbill() {
         }catch (error){
             Swal.fire({
                 title: 'Unsuccessful!',
-                html: 'Invalid username or password!<br/> Please try again.',
+                html: 'Internal server error. <br/> Please try again.',
                 icon: 'error',
                 confirmButtonText: 'Ok'
             });
@@ -138,7 +152,13 @@ export default function Addbill() {
 
 
     useEffect(() => {
-        if (frequency === 'Monthly') {
+        if (frequency === 'Once') {
+            setSelectedDate('');
+        }
+        else if (frequency === 'Weekly') {
+            setSelectedDate('');
+        }
+        else if (frequency === 'Monthly') {
           setSelectedDate('28');
         }
       }, [frequency]);
@@ -197,7 +217,7 @@ export default function Addbill() {
                         <div className="cre-section">
                             <div className="add-section-title mobile-title">Utilities details</div>
                             <div className="cre-container">
-                                <div className="provider">
+                                <div className="provider" required>
                                     <button
                                         className={`cre-btn elec ${selectedProvider === 'elec' ? 'selected' : ''}`}
                                         onClick={() => setSelectedProvider('elec')}

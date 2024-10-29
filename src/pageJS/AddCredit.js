@@ -45,9 +45,12 @@ export default function Addbill() {
                 } else {
                     Swal.fire({
                         title: 'Error',
-                        text: 'An error occurred while fetching data.',
+                        text: 'Please sign in to access this page.',
                         icon: 'error',
                         confirmButtonText: 'Ok'
+                    })
+                    .then(() => {
+                        navigate("/signin");
                     });
                 }
             }
@@ -92,6 +95,16 @@ export default function Addbill() {
 
     const handleInput = async (event)=>{
         event.preventDefault();
+        if (!selectedProvider || !cardNumber || !scheduleName || !money || !selectedDate) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Please select a provider and fill out all required fields.',
+                icon: 'warning',
+                confirmButtonText: 'Ok'
+            });
+            return;
+        }
+
         const user_id = localStorage.getItem("user_id");
         const type = "Mobile";
         const provider = selectedProvider;
@@ -109,19 +122,22 @@ export default function Addbill() {
                     text: 'Insert data successfully!',
                     icon: 'success',
                     confirmButtonText: 'Ok'
+                })
+                .then(() => {
+                    navigate("/addbill");
                 });
             }else{
                 Swal.fire({
-                    title: 'UNSUCCESSFUL!',
-                    html: 'Error to insert data <br/> Please try again.',
+                    title: 'UNSUCCESSFUL',
+                    html: 'Error to insert data. <br/> Please try again.',
                     icon: 'error',
                     confirmButtonText: 'Ok'
                 });
             }
         }catch (error){
             Swal.fire({
-                title: 'Unsuccessful!',
-                html: 'Invalid username or password!<br/> Please try again.',
+                title: 'Error',
+                html: 'Internal server error. <br/> Please try again.',
                 icon: 'error',
                 confirmButtonText: 'Ok'
             });
@@ -167,7 +183,13 @@ export default function Addbill() {
     };
 
     useEffect(() => {
-        if (frequency === 'Monthly') {
+        if (frequency === 'Once') {
+            setSelectedDate('');
+        }
+        else if (frequency === 'Weekly') {
+            setSelectedDate('');
+        }
+        else if (frequency === 'Monthly') {
           setSelectedDate('28');
         }
       }, [frequency]);
@@ -208,8 +230,8 @@ export default function Addbill() {
                             <img src={icrename} alt="Contact Icon" className="icon-rename" />
                         </div>
                         <div className="date-container">
-                            <select className="date" value={selectedDate} onChange={handleDateChange}>
-                                <option value="" disabled selected>Select a day</option>
+                            <select className="date" required value={selectedDate} onChange={handleDateChange}>
+                                <option value="" disabled>Select a day</option>
                                 <option value="Sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -274,7 +296,7 @@ export default function Addbill() {
                         <div className="cre-section">
                             <div className="add-section-title mobile-title">Cradit card details</div>
                             <div className="cre-container">
-                                <div className="provider">
+                                <div className="provider" required>
                                     <button
                                         className={`cre-btn kbank ${selectedProvider === 'kbank' ? 'selected' : ''}`}
                                         onClick={() => setSelectedProvider('kbank')}

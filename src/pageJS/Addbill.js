@@ -36,9 +36,12 @@ export default function Addbill() {
                 } else {
                     Swal.fire({
                         title: 'Error',
-                        text: 'An error occurred while fetching data.',
+                        text: 'Please sign in to access this page.',
                         icon: 'error',
                         confirmButtonText: 'Ok'
+                    })
+                    .then(() => {
+                        navigate("/signin");
                     });
                 }
             }

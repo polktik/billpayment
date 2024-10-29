@@ -1,6 +1,12 @@
 @font-face {
     font-family: 'fontBold';
     src: url('./fonts/JetBrainsMono-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'fontLight';
+    src: url('./fonts/JetBrainsMono-Light.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
@@ -139,14 +145,22 @@ table {
 
 th,
 td {
-    padding: 12px;
-    text-align: left;
+    text-align: center;
     border-bottom: 1px solid #ddd;
 }
 
 th {
     background-color: #4CAF50; /* Green Header */
     color: white;
+    font-family: 'fontBold', sans-serif;
+    font-size: 20px;
+    padding: 10px;
+}
+
+td {
+    font-family: 'fontLight', sans-serif;
+    font-size: 16px;
+    padding: 5px 0;
 }
 
 tr:hover {

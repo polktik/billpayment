@@ -32,9 +32,12 @@ export default function Home() {
                 } else {
                     Swal.fire({
                         title: 'Error',
-                        text: 'An error occurred while fetching data.',
+                        text: 'Please sign in to access this page.',
                         icon: 'error',
                         confirmButtonText: 'Ok'
+                    })
+                    .then(() => {
+                        navigate("/signin");
                     });
                 }
             }
@@ -58,11 +61,19 @@ export default function Home() {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         localStorage.removeItem("user_id");
-        navigate("/signin");
+        navigate("/");
     };
 
-    const addbill = () => {
+    const goAddbill = () => {
         navigate("/addbill");
+    };
+    
+    const goRemovebill = () => {
+        navigate("/removebill");
+    };
+
+    const goUpdatebill = () => {
+        navigate("/updatebill");
     };
 
     const fetchUserData = async () => {
@@ -135,9 +146,9 @@ export default function Home() {
         <div className="hom-main">
             <div className="hom-leftbar">
                 <img className="hom-profile-img" src="https://via.placeholder.com/150" alt="profile-pic" />
-                <button className="hom-btn add" onClick={addbill}>Add Bill</button>
-                <button className="hom-btn remove">Remove Bill</button>
-                <button className="hom-btn update">Update Bill</button>
+                <button className="hom-btn add" onClick={goAddbill}>Add Bill</button>
+                <button className="hom-btn remove" onClick={goRemovebill}>Remove Bill</button>
+                <button className="hom-btn update" onClick={goRemovebill}>Update Bill</button>
                 <button className="hom-btn signout" onClick={signout}>Sign out</button>
             </div>
 
