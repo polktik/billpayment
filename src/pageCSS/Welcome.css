@@ -24,6 +24,7 @@
     margin-right: 54px;
     font-family: 'fontBold', sans-serif;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .wel-register-button {
@@ -36,6 +37,7 @@
     font-size: 45px;
     font-family: 'fontBold', sans-serif;
     font-weight: bold;    
+    cursor: pointer;
 }
 
 .wel-onlinePayment {

@@ -167,6 +167,10 @@
     cursor: pointer;
 }
 
+.back-btn:hover {
+    background-color: #555;
+}
+
 .btn-container {
     display: flex;
     justify-content: space-between;
@@ -190,6 +194,9 @@
     align-content: center;
     cursor: pointer;
     margin-right: 20px;
+}
+.cre-back-btn:hover {
+    background-color: #555;
 }
 
 .proceed-btn {

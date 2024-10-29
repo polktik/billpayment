@@ -99,6 +99,7 @@
     text-decoration: none;
     font-size: 24px;
     font-family: 'fontRegular', sans-serif;
+    cursor: pointer;
 }
 
 .sig-forgot-password a:hover {

@@ -54,14 +54,26 @@
     background-color: #4D81E4;
     color: white;
 }
+.add:hover {
+    background-color: #4d82e4b0;
+}
+
 .remove {
     background-color: #E72020;
     color: white;
 }
+.remove:hover {
+    background-color: #e72020b4;
+}
+
 .update {
     background-color: #EC9F2B;
     color: white;
 }
+.update:hover {
+    background-color: #ec9f2bb9;
+}
+
 .signout {
     background: linear-gradient(to right, #000000, #666666);
     color: white;
