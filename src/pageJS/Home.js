@@ -101,6 +101,9 @@ export default function Home() {
         }
     };
 
+
+
+
     const fetchNotifications = async (user_id) => {
         try {
             const response = await axios.get('http://localhost:3309/notification', {

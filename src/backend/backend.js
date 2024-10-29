@@ -458,6 +458,37 @@ app.put("/update_user_bills", (req, res) => {
 
 
 
+app.get("/get_user_bills_for_delete", (req,res)=>{
+  console.log("data from user",req.query);
+  const user_id = req.query.user_id;
+  const query = "SELECT bill_id,bill_type, providers, number_or_address, total_payment, frequency_type, bill_name, bill_date, status FROM bills WHERE user_id = ?";
+  db.query(query,[user_id],(err,results)=>{
+    if(err){
+      console.error("Error querying",err);
+      return res.status(500).json({error:"An error occoures while getting data from database"});
+    }else{
+      return res.status(200).json(results);
+    }
+  });
+});
+
+app.get("/get_user_bills_for_update", (req,res)=>{
+  console.log("data from user",req.query);
+  const user_id = req.query.user_id;
+  const query = "SELECT bill_id,bill_type, providers, number_or_address, total_payment, frequency_type, bill_name, bill_date, status FROM bills WHERE user_id = ?";
+  db.query(query,[user_id],(err,results)=>{
+    if(err){
+      console.error("Error querying",err);
+      return res.status(500).json({error:"An error occoures while getting data from database"});
+    }else{
+      return res.status(200).json(results);
+    }
+  });
+});
+
+
+
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
