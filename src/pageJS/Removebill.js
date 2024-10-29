@@ -64,11 +64,15 @@ export default function Removebill() {
                 text: 'Selected bills have been deleted.',
                 icon: 'success',
                 confirmButtonText: 'Ok'
+            })
+            .then(() => {
+                setBills(bills.filter(bill => !selectedBills.includes(bill.bill_id)));
+                setSelectedBills([]);
             });
     
             // Remove deleted bills from the state and clear selected bills
-            setBills(bills.filter(bill => !selectedBills.includes(bill.bill_id)));
-            setSelectedBills([]);
+            // setBills(bills.filter(bill => !selectedBills.includes(bill.bill_id)));
+            // setSelectedBills([]);
     
         } catch (error) {
             console.error('Error deleting bills: ', error);

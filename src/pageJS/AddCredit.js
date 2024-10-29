@@ -106,7 +106,7 @@ export default function Addbill() {
         }
 
         const user_id = localStorage.getItem("user_id");
-        const type = "Mobile";
+        const type = "Creditcard";
         const provider = selectedProvider;
         const num = cardNumber;
         const payment = money;
@@ -298,14 +298,14 @@ export default function Addbill() {
                             <div className="cre-container">
                                 <div className="provider" required>
                                     <button
-                                        className={`cre-btn kbank ${selectedProvider === 'kbank' ? 'selected' : ''}`}
-                                        onClick={() => setSelectedProvider('kbank')}
+                                        className={`cre-btn kbank ${selectedProvider === 'Kbank Card' ? 'selected' : ''}`}
+                                        onClick={() => setSelectedProvider('Kbank Card')}
                                     >
                                         KBank Card
                                     </button>
                                     <button
-                                        className={`cre-btn aeon ${selectedProvider === 'aeon' ? 'selected' : ''}`}
-                                        onClick={() => setSelectedProvider('aeon')}
+                                        className={`cre-btn aeon ${selectedProvider === 'AEON Thana Sinsap' ? 'selected' : ''}`}
+                                        onClick={() => setSelectedProvider('AEON Thana Sinsap')}
                                     >
                                         AEON Thana Sinsap
                                     </button>

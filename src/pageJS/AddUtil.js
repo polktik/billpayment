@@ -94,7 +94,7 @@ export default function Addbill() {
         }
 
         const user_id = localStorage.getItem("user_id");
-        const type = "Mobile";
+        const type = "Utilities";
         const provider = selectedProvider;
         const num = address;
         const payment = null;
@@ -219,14 +219,14 @@ export default function Addbill() {
                             <div className="cre-container">
                                 <div className="provider" required>
                                     <button
-                                        className={`cre-btn elec ${selectedProvider === 'elec' ? 'selected' : ''}`}
-                                        onClick={() => setSelectedProvider('elec')}
+                                        className={`cre-btn elec ${selectedProvider === 'Electricity' ? 'selected' : ''}`}
+                                        onClick={() => setSelectedProvider('Electricity')}
                                     >
-                                        Electronics
+                                        Electricity
                                     </button>
                                     <button
-                                        className={`cre-btn water ${selectedProvider === 'water' ? 'selected' : ''}`}
-                                        onClick={() => setSelectedProvider('water')}
+                                        className={`cre-btn water ${selectedProvider === 'Water' ? 'selected' : ''}`}
+                                        onClick={() => setSelectedProvider('Water')}
                                     >
                                         Water
                                     </button>

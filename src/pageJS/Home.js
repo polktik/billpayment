@@ -17,7 +17,7 @@ export default function Home() {
                 unauthorizedRedirect();
                 return;
             }
-            
+
             try {
                 const response = await axios.get('http://localhost:3309/protected', {
                     headers: {
@@ -36,9 +36,9 @@ export default function Home() {
                         icon: 'error',
                         confirmButtonText: 'Ok'
                     })
-                    .then(() => {
-                        navigate("/signin");
-                    });
+                        .then(() => {
+                            navigate("/signin");
+                        });
                 }
             }
         };
@@ -67,7 +67,7 @@ export default function Home() {
     const goAddbill = () => {
         navigate("/addbill");
     };
-    
+
     const goRemovebill = () => {
         navigate("/removebill");
     };
@@ -109,9 +109,11 @@ export default function Home() {
             const response = await axios.get('http://localhost:3309/notification', {
                 params: { user_id }
             });
-            
+
             // Get only the newest 20 notifications
-            const latestNotifications = response.data.slice(0, 20); 
+            const latestNotifications = response.data
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 20);
             setNotifications(latestNotifications);
         } catch (error) {
             console.error("Error fetching notifications:", error);
@@ -125,13 +127,15 @@ export default function Home() {
     };
 
     const fetchUserBills = async (user_id) => {
-        try{
-            const response = await axios.get('http://localhost:3309/get_user_bills',{
-                params:{user_id}
+        try {
+            const response = await axios.get('http://localhost:3309/get_user_bills', {
+                params: { user_id }
             });
-            const latestUserBills = response.data.slice(0,20);
+            const latestUserBills = response.data
+                .sort((a, b) => new Date(b.bill_date) - new Date(a.bill_date))
+                .slice(0, 20);
             setReminders(latestUserBills);
-        }catch(error){
+        } catch (error) {
             Swal.fire({
                 title: 'Error',
                 text: 'Failed to load notifications.',
@@ -139,6 +143,34 @@ export default function Home() {
                 confirmButtonText: 'Ok'
             });
         }
+    };
+
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+
+    const sortData = (key) => {
+        let direction = 'ascending';
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending';
+        }
+        setSortConfig({ key, direction });
+
+        const sortedReminders = [...reminders].sort((a, b) => {
+            if (key === 'bill_date') {
+                // การเรียงลำดับแบบพิเศษสำหรับวันที่
+                const dateA = new Date(a[key]);
+                const dateB = new Date(b[key]);
+                return direction === 'ascending' ? dateA - dateB : dateB - dateA;
+            } else {
+                if (a[key] < b[key]) {
+                    return direction === 'ascending' ? -1 : 1;
+                }
+                if (a[key] > b[key]) {
+                    return direction === 'ascending' ? 1 : -1;
+                }
+                return 0;
+            }
+        });
+        setReminders(sortedReminders);
     };
 
     if (!protectedData) {
@@ -160,17 +192,17 @@ export default function Home() {
                     <h3 className="hom-section-title reminder-title">Bill Reminder</h3>
                     <div className="reminder-container">
                         <div className="reminder-list">
-                        <table>
+                            <table>
                                 <thead>
                                     <tr>
-                                        <th>Status</th>
-                                        <th>Bill Type</th>
+                                        <th className="canSort" onClick={() => sortData('status')}>Status</th>
+                                        <th className="canSort" onClick={() => sortData('bill_type')}>Bill Type</th>
                                         <th>Bill Name</th>
                                         <th>Provider</th>
                                         <th>Number/Address</th>
                                         <th>Payment (Baht)</th>
-                                        <th>Frequency</th>
-                                        <th>Due Date</th>
+                                        <th className="canSort" onClick={() => sortData('frequency_type')}>Frequency</th>
+                                        <th className="canSort" onClick={() => sortData('bill_date')}>Due Date</th>
                                     </tr>
                                 </thead>
                                 <tbody>
