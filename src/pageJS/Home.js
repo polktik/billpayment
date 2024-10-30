@@ -76,6 +76,10 @@ export default function Home() {
         navigate("/updatebill");
     };
 
+    const goSetting = () => {
+        navigate("/settings");
+    }
+
     const fetchUserData = async () => {
         const username = localStorage.getItem('username');
         console.log("username:", username);
@@ -180,7 +184,7 @@ export default function Home() {
     return (
         <div className="hom-main">
             <div className="hom-leftbar">
-                <img className="hom-profile-img" src="https://via.placeholder.com/150" alt="profile-pic" />
+                <img className="hom-profile-img" src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" alt="profile-pic" onClick={goSetting}/>
                 <button className="hom-btn add" onClick={goAddbill}>Add Bill</button>
                 <button className="hom-btn remove" onClick={goRemovebill}>Remove Bill</button>
                 <button className="hom-btn update" onClick={goUpdatebill}>Update Bill</button>

@@ -12,6 +12,8 @@ import Removebill from './pageJS/Removebill';
 import Updatebill from './pageJS/Updatebill';
 import Forgot from './pageJS/Forgot';
 import ResetPassword from './pageJS/ResetPassword';
+import Settings from './pageJS/Settings';
+import ChangePassword from './pageJS/ChangePassword';
 import './App.css';
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
         <Route path="/addutil" element={<AddUtil/>}/>
         <Route path="/removebill" element={<Removebill/>}/>
         <Route path="/updatebill" element={<Updatebill/>}/>
+        <Route path='/settings' element={<Settings/>}/>
+        <Route path='/changepassword' element={<ChangePassword/>}/>
       </Routes>
     </Router>
   );

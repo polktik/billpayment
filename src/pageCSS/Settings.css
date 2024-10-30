@@ -1,0 +1,121 @@
+@font-face {
+    font-family: 'fontBold';
+    src: url('./fonts/JetBrainsMono-Bold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'fontMedium';
+    src: url('./fonts/JetBrainsMono-Medium.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'fontRegular';
+    src: url('./fonts/JetBrainsMono-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'fontLight';
+    src: url('./fonts/JetBrainsMono-Light.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.main-background {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 100vh;
+    background: linear-gradient(to bottom, #6e6e6e, #c4c4c4); /* สีพื้นหลังไล่สี */
+}
+
+.settings-list {
+    margin-top: 20px;
+    justify-items: center;
+}
+
+.profile-img {
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.profile-img:hover {
+    opacity: 0.5;
+}
+
+span {
+    font-family: 'fontBold', sans-serif;
+    text-align: start;
+    font-size: 22px;
+}
+
+.user-box {
+    border: 2px solid black;
+    width: 400px;
+    height: 50px;
+    font-family: 'fontLight', sans-serif;
+    font-size: 20px;
+    align-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+}
+
+.password-box {
+    border: 2px solid black;
+    width: 400px;
+    height: 50px;
+    font-family: 'fontLight', sans-serif;
+    font-size: 20px;
+    align-content: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+    transition: opacity 0.3s;
+    cursor: pointer;
+}
+
+.username, .email, .password {
+    margin-top: 20px;
+}
+
+
+.password-box:hover{
+    opacity: 0.5;
+    font-family: 'fontBold', sans-serif;
+    font-weight: bold;
+}
+
+.done {
+    width: 200px;
+    height: 60px;
+    border-radius: 10px;
+    font-family: 'fontBold', sans-serif;
+    font-size: 45px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.done{
+    color: white;
+    background-color: #1FD71B;
+    border: 1px solid #000000;
+}
+
+.done:hover {
+    background-color: #1ed71ba2 ;
+}

@@ -38,6 +38,12 @@
     border-radius: 5px;
     margin-bottom: 20px;
     margin-top: 50px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.hom-profile-img:hover {
+    opacity: 0.5;
 }
 
 .hom-btn {
