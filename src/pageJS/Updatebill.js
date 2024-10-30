@@ -39,7 +39,7 @@ export default function UpdateBill() {
     const markAsPaid = () => {
         setBills(prevBills =>
             prevBills.map(bill =>
-                selectedBills.includes(bill.bill_id) ? { ...bill, status: "paid" } : bill
+                selectedBills.includes(bill.bill_id) ? { ...bill, status: "Paid" } : bill
             )
         );
     };
@@ -102,6 +102,7 @@ export default function UpdateBill() {
         <div>
             <div className="update-bill-container">
                 <div className="title">Bill List</div>
+                <div>
                 <table className="bill-table">
                     <thead>
                         <tr>
@@ -132,6 +133,7 @@ export default function UpdateBill() {
                         ))}
                     </tbody>
                 </table>
+            </div>
             </div>
             <div className="button-container">
                 <button className="back-button" onClick={goBack}>Back</button>
