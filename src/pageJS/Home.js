@@ -61,6 +61,7 @@ export default function Home() {
         localStorage.removeItem("token");
         localStorage.removeItem("username");
         localStorage.removeItem("user_id");
+        localStorage.removeItem("email");
         navigate("/");
     };
 

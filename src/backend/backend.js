@@ -40,6 +40,8 @@ app.use((req,res,next)=>{
 });
 app.use(express.json());
 
+app.use('/uploads', express.static('uploads')); // Adjust based on your directory structure
+
 
 
 const db = mysql.createConnection({
@@ -585,13 +587,14 @@ app.get("/get_user_bills_for_update", (req,res)=>{
 app.get("/user_profile_data",(req,res)=>{
   console.log("user_id",req.query.user_id);
 
-  const user_id = req.body.user_id;
+  const user_id = req.query.user_id;
   const query  = "SELECT first_name, last_name, username, email, profile_pic FROM users WHERE user_id = ?";
   db.query(query,[user_id],(err,results)=>{
     if(err){
       console.error("Error querying data",err);
       return res.status(500).json({error:"An error occoured while getting fata from database"});
     }else{
+      console.log(results);
       return res.status(200).json(results);
     }
   });
@@ -604,32 +607,22 @@ app.put("/update_profilepics", upload.single('profile_pic'), (req, res) => {
   const pics = req.file ? req.file.path : null; // Get the file path
 
   if (!pics) {
-    return res.status(400).json({ error: "No file uploaded." });
+      return res.status(400).json({ error: "No file uploaded." });
   }
 
   const query = "UPDATE users SET profile_pic = ? WHERE user_id = ?";
   db.query(query, [pics, user_id], (err, results) => {
-    if (err) {
-      console.error("Error updating data", err);
-      return res.status(500).json({ error: "An error occurred while updating data to database" });
-    } else {
-      return res.status(200).json(results); //////////////// ใช้กับปุ่ม upload profile picture
-    }
+      if (err) {
+          console.error("Error updating data", err);
+          return res.status(500).json({ error: "An error occurred while updating data to database" });
+      } else {
+          return res.status(200).json(results); 
+      }
   });
 });
 
 
-app.get("/get_bill_for_mail_noti",(req,res) => {
-  const query = "SELECT * FROM bills";
-  db.query(query,(err,results)=>{
-    if(err){
-      console.error("Error querying bills data");
-      return res.status(500).json({error:"An error occoured while updating data to database"});
-    }else{
-      return res.status(200).json(results);
-    }
-  })
-})
+
 
 
 app.listen(port, () => {
