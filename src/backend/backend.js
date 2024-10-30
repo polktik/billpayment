@@ -9,6 +9,8 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const path = require('path');
+const cron = require('node-cron');
+const moment = require('moment');
 
 require("dotenv").config();
 
@@ -48,6 +50,16 @@ const db = mysql.createConnection({
     database: process.env.DB_DATABASE,
 });
 
+// เชื่อมต่อกับ MySQL
+db.connect((err) => {
+  if (err) {
+    console.error("Error connecting to MySQL:", err);
+  } else {
+    console.log("Connected to MySQL database");
+  }
+});
+
+
 
 const transporter = nodemailer.createTransport({
   service:"Gmail",
@@ -62,14 +74,6 @@ const transporter = nodemailer.createTransport({
 
 const JWT_SECRET = crypto.randomBytes(64).toString('hex');
 
-// เชื่อมต่อกับ MySQL
-db.connect((err) => {
-  if (err) {
-    console.error("Error connecting to MySQL:", err);
-  } else {
-    console.log("Connected to MySQL database");
-  }
-});
 
 
 // Middleware for token authentication
@@ -85,6 +89,95 @@ function authenticateToken(req, res, next) {
       next();
   });
 }
+
+// Function to send an email notification
+function sendNotificationEmail(toEmail, subject, message) {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: toEmail,
+    subject: subject,
+    text: message,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending email:', error);
+    } else {
+      console.log('Email sent:', info.response);
+    }
+  });
+}
+
+// Helper function to check if a reminder is due today or two days before the `bill_date`
+function isReminderDue(billDate, frequencyType) {
+  const today = moment();
+  const twoDaysBefore = moment(billDate).subtract(2, 'days');
+  const billDay = parseInt(billDate); // For Monthly frequency
+
+  if (frequencyType === 'Monthly') {
+    // Check if today is the due day or two days before the due day
+    return today.date() === billDay || today.isSame(twoDaysBefore, 'day');
+  } else if (frequencyType === 'Once') {
+    const billMoment = moment(billDate, 'YYYY-MM-DD');
+    // Check if today is the due day or two days before the due date
+    return today.isSame(billMoment, 'day') || today.isSame(twoDaysBefore, 'day');
+  } else if (frequencyType === 'Weekly') {
+    // Check if today is the same weekday or two days before the specified weekday
+    return today.format('dddd') === billDate || today.isSame(twoDaysBefore, 'day');
+  }
+
+  return false;
+}
+
+
+// Retrieve bills and user information from the database directly
+async function getBillsFromDatabase() {
+  return new Promise((resolve, reject) => {
+    db.query(`
+      SELECT 
+        users.user_id, 
+        users.user_name, 
+        users.email, 
+        bills.bill_name, 
+        bills.bill_date, 
+        bills.frequency_type, 
+        bills.status 
+      FROM bills
+      INNER JOIN users ON bills.user_id = users.user_id
+      WHERE bills.status = 'Unpaid'
+    `, (error, results) => {
+      if (error) return reject(error);
+      resolve(results);
+    });
+  });
+}
+
+// Check and send notifications based on bill data
+async function processBillReminders() {
+  try {
+    const bills = await getBillsFromDatabase();
+
+    bills.forEach((bill) => {
+      const { user_id, user_name, email, bill_name, bill_date, frequency_type, status } = bill;
+
+      if (status === 'Unpaid' && isReminderDue(bill_date, frequency_type)) {
+        const subject = `Reminder: ${bill_name} is due soon`;
+        const message = `Dear ${user_name}, your bill "${bill_name}" is due soon. Please ensure timely payment.`;
+        sendNotificationEmail(email, subject, message);
+      }
+    });
+  } catch (error) {
+    console.error("Error processing reminders:", error);
+  }
+}
+
+// Schedule task to run daily at 1:00 PM
+cron.schedule('0 13 * * *', async () => {
+  console.log("Running daily reminder check...");
+  await processBillReminders();
+});
+
+
 
 
 
@@ -525,6 +618,18 @@ app.put("/update_profilepics", upload.single('profile_pic'), (req, res) => {
   });
 });
 
+
+app.get("/get_bill_for_mail_noti",(req,res) => {
+  const query = "SELECT * FROM bills";
+  db.query(query,(err,results)=>{
+    if(err){
+      console.error("Error querying bills data");
+      return res.status(500).json({error:"An error occoured while updating data to database"});
+    }else{
+      return res.status(200).json(results);
+    }
+  })
+})
 
 
 app.listen(port, () => {
