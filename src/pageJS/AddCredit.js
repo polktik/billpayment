@@ -15,7 +15,6 @@ import icbaht from "../images/icon-baht.png";
 export default function Addbill() {
     const navigate = useNavigate();
     const [protectedData, setProtectedData] = useState(null);
-    const [pageSelect, setPageSelect] = useState('');
     const [frequency, setFrequency] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedProvider, setSelectedProvider] = useState('');
@@ -70,13 +69,27 @@ export default function Addbill() {
         fetchProtectedData();
     }, [navigate]);
 
+    const validateCardNumber = (input) => {
+        const onlyNumbers = input.replace(/\D/g, ''); // Remove non-numeric characters
+        if (onlyNumbers.length <= 16) {
+            setCardNumber(onlyNumbers); // Limit to 16 digits
+        }
+    };
+
+    const validateMoneyInput = (input) => {
+        const onlyNumbers = input.replace(/\D/g, ''); // Remove non-numeric characters
+        if (onlyNumbers.length <= 10) {
+            setMoney(onlyNumbers); // Limit to 10 digits
+        }
+    };
+
 
     const handleInputChange = (e) => {
         setScheduleName(e.target.value);
       };
 
     const handleCardInput = (e) => {
-        setCardNumber(e.target.value);
+        validateCardNumber(e.target.value);
     };
     const handleDateChange = (e) => {
         setSelectedDate(e.target.value);
@@ -87,7 +100,7 @@ export default function Addbill() {
     //   };
 
       const handleMoneyChange = (e) => {
-        setMoney(e.target.value);
+        validateMoneyInput(e.target.value);
       };
 
 
@@ -95,10 +108,10 @@ export default function Addbill() {
 
     const handleInput = async (event)=>{
         event.preventDefault();
-        if (!selectedProvider || !cardNumber || !scheduleName || !money || !selectedDate) {
+        if (!selectedProvider || !cardNumber || !scheduleName || !money || !selectedDate || cardNumber.length !== 16) {
             Swal.fire({
                 title: 'Error',
-                text: 'Please select a provider and fill out all required fields.',
+                text: 'Please select a provider, fill out all required fields, <br/>and ensure the credit card number is 16 digits.',
                 icon: 'warning',
                 confirmButtonText: 'Ok'
             });
@@ -119,7 +132,7 @@ export default function Addbill() {
             if(response.data.success){
                 Swal.fire({
                     title: 'SUCCESS',
-                    text: 'Insert data successfully!',
+                    text: 'Add bill successfully!',
                     icon: 'success',
                     confirmButtonText: 'Ok'
                 })
@@ -275,21 +288,21 @@ export default function Addbill() {
                     <div className="icon-background">
                         <img src={icmobile} alt="Mobile Icon" className="icon-mobile" />
                     </div>
-                    <span>Mobile</span>
+                    <label>Mobile</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddCredit}>
                     <div className="icon-background">
                         <img src={iccredit} alt="Credit Card Icon" className="icon-credit" />
                     </div>
-                    <span>Credit Card</span>
+                    <label>Credit Card</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddUtil}>
                     <div className="icon-background">
                         <img src={icutil} alt="utilities Icon" className="icon-util" />
                     </div>
-                    <span>Utilities</span>
+                    <label>Utilities</label>
                 </button>
             </div>
             <div className="add-content-box">

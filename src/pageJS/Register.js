@@ -50,7 +50,7 @@ return (<div className="register-page">
             <div className="username-box">
                 <input type="text" placeholder="Username" value={username} onChange={(e)=>setUsername(e.target.value)} required />
             </div>
-            <div className="password-box">
+            <div className="reg-password-box">
                 <input type="password" placeholder="Password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
             </div>
             <div className="email-box">

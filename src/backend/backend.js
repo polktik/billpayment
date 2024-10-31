@@ -138,7 +138,7 @@ async function getBillsFromDatabase() {
     db.query(`
       SELECT 
         users.user_id, 
-        users.user_name, 
+        users.username, 
         users.email, 
         bills.bill_name, 
         bills.bill_date, 
@@ -160,11 +160,11 @@ async function processBillReminders() {
     const bills = await getBillsFromDatabase();
 
     bills.forEach((bill) => {
-      const { user_id, user_name, email, bill_name, bill_date, frequency_type, status } = bill;
+      const { user_id, username, email, bill_name, bill_date, frequency_type, status } = bill;
 
       if (status === 'Unpaid' && isReminderDue(bill_date, frequency_type)) {
         const subject = `Reminder: ${bill_name} is due soon`;
-        const message = `Dear ${user_name}, your bill "${bill_name}" is due soon. Please ensure timely payment.`;
+        const message = `Dear ${username}, your bill "${bill_name}" is due soon. \nPlease ensure timely payment.`;
         sendNotificationEmail(email, subject, message);
       }
     });

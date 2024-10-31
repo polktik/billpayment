@@ -13,7 +13,6 @@ import iccalendar from "../images/icon-calendar.png";
 
 export default function Addbill() {
     const navigate = useNavigate();
-    const [pageSelect, setPageSelect] = useState('');
     const [frequency, setFrequency] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedProvider, setSelectedProvider] = useState('');
@@ -74,7 +73,7 @@ export default function Addbill() {
       };
 
     const handleMobileInput = (e) => {
-        setMobileNumber(e.target.value);
+        validateMobileNumber(e.target.value);
     };
     const handleDateChange = (e) => {
         setSelectedDate(e.target.value);
@@ -84,12 +83,20 @@ export default function Addbill() {
     //     setSelectedDate("28");
     //   };
 
+    const validateMobileNumber = (input) => {
+        const onlyNumbers = input.replace(/\D/g, ''); // Remove non-numeric characters
+        if (onlyNumbers.length <= 10) {
+            setMobileNumber(onlyNumbers); // Limit to 10 digits
+        }
+    };
+    
+
     const handleInput = async (event)=>{
         event.preventDefault();
-        if (!selectedProvider || !mobileNumber || !scheduleName || !selectedDate) {
+        if (!selectedProvider || !mobileNumber || !scheduleName || !selectedDate || mobileNumber.length !== 10) {
             Swal.fire({
                 title: 'Error',
-                text: 'Please select a provider and fill out all required fields.',
+                html: 'Please select a provider, fill out all required fields, <br/>and ensure the mobile number is 10 digits.',
                 icon: 'warning',
                 confirmButtonText: 'Ok'
             });
@@ -110,7 +117,7 @@ export default function Addbill() {
             if(response.data.success){
                 Swal.fire({
                     title: 'SUCCESS',
-                    text: 'Insert data successfully!',
+                    text: 'Add bill successfully!',
                     icon: 'success',
                     confirmButtonText: 'Ok'
                 })
@@ -266,21 +273,21 @@ export default function Addbill() {
                     <div className="icon-background">
                         <img src={icmobile} alt="Mobile Icon" className="icon-mobile" />
                     </div>
-                    <span>Mobile</span>
+                    <label>Mobile</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddCredit}>
                     <div className="icon-background">
                         <img src={iccredit} alt="Credit Card Icon" className="icon-credit" />
                     </div>
-                    <span>Credit Card</span>
+                    <label>Credit Card</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddUtil}>
                     <div className="icon-background">
                         <img src={icutil} alt="utilities Icon" className="icon-util" />
                     </div>
-                    <span>Utilities</span>
+                    <label>Utilities</label>
                 </button>
             </div>
             <div className="add-content-box">

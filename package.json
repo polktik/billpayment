@@ -23,7 +23,6 @@
     "react-scripts": "5.0.1",
     "sql": "^0.78.0",
     "sweetalert2": "^11.14.4",
-    "sweetalert2-react-content": "^5.0.7",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

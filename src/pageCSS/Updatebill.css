@@ -83,8 +83,20 @@
     margin-top: 20px;
 }
 
-.back-button, .paid-button, .done-button {
+.back-button, .done-button {
     width: 200px;
+    height: 60px;
+    border-radius: 10px;
+    font-family: 'fontBold', sans-serif;
+    font-size: 45px;
+    cursor: pointer;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.paid-button {
+    width: 350px;
     height: 60px;
     border-radius: 10px;
     font-family: 'fontBold', sans-serif;

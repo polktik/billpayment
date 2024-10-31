@@ -1,5 +1,5 @@
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import "../pageCSS/Addbill.css";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
@@ -21,7 +21,7 @@ export default function Addbill() {
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedProvider, setSelectedProvider] = useState('');
     const [scheduleName, setScheduleName] = useState('');
-    const [address, setAddress]= useState('');
+    const [address, setAddress] = useState('');
 
     useEffect(() => {
         const fetchProtectedData = async () => {
@@ -30,7 +30,7 @@ export default function Addbill() {
                 unauthorizedRedirect();
                 return;
             }
-            
+
             try {
                 const response = await axios.get('http://localhost:3309/protected', {
                     headers: {
@@ -50,9 +50,9 @@ export default function Addbill() {
                         icon: 'error',
                         confirmButtonText: 'Ok'
                     })
-                    .then(() => {
-                        navigate("/signin");
-                    });
+                        .then(() => {
+                            navigate("/signin");
+                        });
                 }
             }
         };
@@ -72,21 +72,24 @@ export default function Addbill() {
     }, [navigate]);
 
 
-      const handleInputChange = (e) => {
+    const handleInputChange = (e) => {
         setScheduleName(e.target.value);
-      };
-      
-      const handleAddressChange = (e) => {
-        setAddress(e.target.value);
     };
 
-      const handleInput = async (event)=>{
+    const handleAddressChange = (e) => {
+        const input = e.target.value;
+        if (input.length <= 255) {
+            setAddress(input);
+        }
+    };
+
+    const handleInput = async (event) => {
         event.preventDefault();
 
         if (!selectedProvider || !address || !scheduleName || !selectedDate) {
             Swal.fire({
                 title: 'Error',
-                text: 'Please select a provider and fill out all required fields.',
+                text: 'Please select a provider, fill out all required fields, <br/>and ensure the address does not exceed 255 characters.',
                 icon: 'warning',
                 confirmButtonText: 'Ok'
             });
@@ -100,18 +103,21 @@ export default function Addbill() {
         const payment = null;
         const date = selectedDate
         const name = scheduleName;
-        console.log("user_id = ",user_id);
-        try{
-            const response = await axios.post("http://localhost:3309/insert_user_bill",{user_id, type, provider, num, payment, frequency, name, date});
+        console.log("user_id = ", user_id);
+        try {
+            const response = await axios.post("http://localhost:3309/insert_user_bill", { user_id, type, provider, num, payment, frequency, name, date });
             console.log(response.data);
-            if(response.data.success){
+            if (response.data.success) {
                 Swal.fire({
                     title: 'SUCCESS',
-                    text: 'Insert data successfully!',
+                    text: 'Add bill successfully!',
                     icon: 'success',
                     confirmButtonText: 'Ok'
-                });
-            }else{
+                })
+                    .then(() => {
+                        navigate("/addbill");
+                    });
+            } else {
                 Swal.fire({
                     title: 'UNSUCCESSFUL!',
                     html: 'Error to insert data <br/> Please try again.',
@@ -119,14 +125,14 @@ export default function Addbill() {
                     confirmButtonText: 'Ok'
                 });
             }
-        }catch (error){
+        } catch (error) {
             Swal.fire({
                 title: 'Unsuccessful!',
                 html: 'Internal server error. <br/> Please try again.',
                 icon: 'error',
                 confirmButtonText: 'Ok'
             });
-            
+
         }
 
     };
@@ -159,9 +165,9 @@ export default function Addbill() {
             setSelectedDate('');
         }
         else if (frequency === 'Monthly') {
-          setSelectedDate('28');
+            setSelectedDate('28');
         }
-      }, [frequency]);
+    }, [frequency]);
 
     const renderFrequencyInput = () => {
         switch (frequency) {
@@ -183,7 +189,7 @@ export default function Addbill() {
         }
     };
 
-    
+
     if (!protectedData) {
         return null;
     }
@@ -196,65 +202,65 @@ export default function Addbill() {
                     <div className="icon-background">
                         <img src={icmobile} alt="Mobile Icon" className="icon-mobile" />
                     </div>
-                    <span>Mobile</span>
+                    <label>Mobile</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddCredit}>
                     <div className="icon-background">
                         <img src={iccredit} alt="Credit Card Icon" className="icon-credit" />
                     </div>
-                    <span>Credit Card</span>
+                    <label>Credit Card</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddUtil}>
                     <div className="icon-background">
                         <img src={icutil} alt="utilities Icon" className="icon-util" />
                     </div>
-                    <span>Utilities</span>
+                    <label>Utilities</label>
                 </button>
             </div>
             <div className="add-content-box">
-                        <div className="cre-section">
-                            <div className="add-section-title mobile-title">Utilities details</div>
-                            <div className="cre-container">
-                                <div className="provider" required>
-                                    <button
-                                        className={`cre-btn elec ${selectedProvider === 'Electricity' ? 'selected' : ''}`}
-                                        onClick={() => setSelectedProvider('Electricity')}
-                                    >
-                                        Electricity
-                                    </button>
-                                    <button
-                                        className={`cre-btn water ${selectedProvider === 'Water' ? 'selected' : ''}`}
-                                        onClick={() => setSelectedProvider('Water')}
-                                    >
-                                        Water
-                                    </button>
+                <div className="cre-section">
+                    <div className="add-section-title mobile-title">Utilities details</div>
+                    <div className="cre-container">
+                        <div className="provider" required>
+                            <button
+                                className={`cre-btn elec ${selectedProvider === 'Electricity' ? 'selected' : ''}`}
+                                onClick={() => setSelectedProvider('Electricity')}
+                            >
+                                Electricity
+                            </button>
+                            <button
+                                className={`cre-btn water ${selectedProvider === 'Water' ? 'selected' : ''}`}
+                                onClick={() => setSelectedProvider('Water')}
+                            >
+                                Water
+                            </button>
 
-                                    <div className="mobile-input">
-                                        <input className="mobile-num" type="text" placeholder="Enter Address." required value={address} onChange={handleAddressChange}/>
-                                        <img src={icaddress} alt="Contact Icon" className="icon-contact" />
-                                    </div>
-                                </div>
-
-                                <div className="add-section-title freq-title">Frequency</div>
-                                <div className="freq-options">
-                                    <input className="freq-input monthly"
-                                        type="radio"
-                                        name="frequency"
-                                        value="Monthly"
-                                        checked={frequency === 'Monthly'}
-                                        onChange={() => setFrequency('Monthly')}
-                                    />Monthly
-                                </div>
-                                {renderFrequencyInput()}
+                            <div className="mobile-input">
+                                <input className="mobile-num" type="text" placeholder="Enter Address." required value={address} onChange={handleAddressChange} />
+                                <img src={icaddress} alt="Contact Icon" className="icon-contact" />
                             </div>
-                            <div className="btn-container">
-                                <button className="cre-back-btn" onClick={goAddbill}>Back</button>
-                                <button className="proceed-btn" onClick={handleInput}>Proceed</button>
-                            </div> 
                         </div>
+
+                        <div className="add-section-title freq-title">Frequency</div>
+                        <div className="freq-options">
+                            <input className="freq-input monthly"
+                                type="radio"
+                                name="frequency"
+                                value="Monthly"
+                                checked={frequency === 'Monthly'}
+                                onChange={() => setFrequency('Monthly')}
+                            />Monthly
+                        </div>
+                        {renderFrequencyInput()}
                     </div>
+                    <div className="btn-container">
+                        <button className="cre-back-btn" onClick={goAddbill}>Back</button>
+                        <button className="proceed-btn" onClick={handleInput}>Proceed</button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

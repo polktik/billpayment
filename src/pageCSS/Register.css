@@ -64,7 +64,7 @@
 .firstname-box,
 .lastname-box,
 .username-box,
-.password-box,
+.reg-password-box,
 .email-box {
     margin-bottom: 20px;
 }
@@ -72,7 +72,7 @@
 .firstname-box input,
 .lastname-box input,
 .username-box input,
-.password-box input,
+.reg-password-box input,
 .email-box input {
     width: 590px;
     height: 72px;

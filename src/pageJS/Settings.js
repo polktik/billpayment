@@ -157,7 +157,7 @@ export default function Settings() {
                             src={
                                 userData[0].profile_pic
                                     ? `http://localhost:3309/${userData[0].profile_pic}`
-                                    : "https://via.placeholder.com/150"
+                                    : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
                             }
                             alt="profile-pic"
                             onClick={() => fileInputRef.current.click()}
@@ -166,7 +166,7 @@ export default function Settings() {
                             type="file"
                             ref={fileInputRef}
                             style={{ display: "none" }}
-                            accept=".jpeg,.png,.jpg"
+                            accept=".jpeg,.png,.jpg, .jfif"
                             onChange={handleFileChange}
                         />
                         <div className="name">

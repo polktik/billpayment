@@ -7,8 +7,8 @@
 
 .add-main {
     display: flex;
+    width: 100vw;
     height: 100vh;
-    border: 2px solid black;
     background-color: #e6e6e6;
 }
 
@@ -50,6 +50,11 @@
     display: flex;
     align-items: center;
     justify-content: start;
+    cursor: pointer;
+}
+
+label {
+    cursor: pointer;
 }
 
 .add-btn img.icon-mobile {
@@ -174,8 +179,6 @@
 .btn-container {
     display: flex;
     justify-content: space-between;
-    /* padding: 0 20px; Adjust padding to control space between buttons and edges */
-    /* margin-top: 30px; */
 }
 
 .cre-back-btn {

@@ -8,6 +8,7 @@ export default function Home() {
     const [protectedData, setProtectedData] = useState(null);
     const [reminders, setReminders] = useState([]);
     const [notifications, setNotifications] = useState([]);
+    const [userData, setUserData] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,6 +27,7 @@ export default function Home() {
                 });
                 setProtectedData(response.data);
                 fetchUserData();
+                fetchProfilePicture();
             } catch (error) {
                 if (error.response && error.response.status === 401) {
                     unauthorizedRedirect();
@@ -178,6 +180,30 @@ export default function Home() {
         setReminders(sortedReminders);
     };
 
+
+    const fetchProfilePicture = async () => {
+        const user_id = localStorage.getItem('user_id');
+        console.log("user_id:", user_id);
+    
+        try {
+            const response = await axios.get('http://localhost:3309/user_profile_data', {
+                params: { user_id }
+            });
+            console.log("Full response data:", response.data);
+            
+            if (response.data && response.data.length > 0) {
+                setUserData(response.data);
+            } else {
+                console.warn("User data not found in response.");
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 404) {
+                console.warn("Unauthorized message");
+            } else {
+                console.error("An error occurred:", error.message);
+            }
+        }
+    };
     if (!protectedData) {
         return null;
     }
@@ -185,7 +211,16 @@ export default function Home() {
     return (
         <div className="hom-main">
             <div className="hom-leftbar">
-                <img className="hom-profile-img" src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" alt="profile-pic" onClick={goSetting}/>
+            <img
+                    className="hom-profile-img"
+                    src={
+                        userData.length > 0 && userData[0].profile_pic
+                            ? `http://localhost:3309/${userData[0].profile_pic}`
+                            : "https://via.placeholder.com/150"
+                    }
+                    alt="profile-pic"
+                    onClick={goSetting}
+                />
                 <button className="hom-btn add" onClick={goAddbill}>Add Bill</button>
                 <button className="hom-btn remove" onClick={goRemovebill}>Remove Bill</button>
                 <button className="hom-btn update" onClick={goUpdatebill}>Update Bill</button>

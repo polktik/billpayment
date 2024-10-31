@@ -91,21 +91,21 @@ export default function Addbill() {
                     <div className="icon-background">
                         <img src={icmobile} alt="Mobile Icon" className="icon-mobile" />
                     </div>
-                    <span>Mobile</span>
+                    <label>Mobile</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddCredit}>
                     <div className="icon-background">
                         <img src={iccredit} alt="Credit Card Icon" className="icon-credit" />
                     </div>
-                    <span>Credit Card</span>
+                    <label>Credit Card</label>
                 </button>
 
                 <button className="add-btn" onClick={goAddUtil}>
                     <div className="icon-background">
                         <img src={icutil} alt="utilities Icon" className="icon-util" />
                     </div>
-                    <span>Utilities</span>
+                    <label>Utilities</label>
                 </button>
             </div>
             <div className="add-content-box">
